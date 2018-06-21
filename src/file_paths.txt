@@ -1,0 +1,3 @@
+mscoco_file_path = '/media/greghovhannisyan/BackupData1/mscoco/'
+images_file_path = '/images/'
+annotations_file_path = '/annotations/'
