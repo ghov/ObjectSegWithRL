@@ -1,3 +1,6 @@
+# NEED to add the transform function the image must be transformed along with the mask, otherwise it is useless.
+
+
 import torch.utils.data as data
 from PIL import Image
 import os

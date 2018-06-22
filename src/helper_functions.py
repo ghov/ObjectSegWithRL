@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
 
-
+# The images are not of the same dimensions. Will need to resize all images.
 
 
 
@@ -23,9 +23,16 @@ class mask_state():
         self.y4 = y4
 
 
+    def to_tensor(self):
 
 
 
+    def to_polygon(self):
+
+
+
+
+    def to_binary_mask(self):
 
 
 
