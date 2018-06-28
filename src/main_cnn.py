@@ -5,6 +5,8 @@ class AlexNet(nn.Module):
 
     def __init__(self, num_classes=1000):
         super(AlexNet, self).__init__()
+
+        # This computes the cnn section. After this, we need to resize the features into a vector.
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
@@ -20,6 +22,8 @@ class AlexNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
         )
+
+        # This take the vector form of the features and computes the linear layers.
         self.classifier = nn.Sequential(
             nn.Dropout(),
             nn.Linear(256 * 6 * 6, 4096),
@@ -27,11 +31,13 @@ class AlexNet(nn.Module):
             nn.Dropout(),
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, num_classes),
+            #nn.Linear(4096, num_classes),
         )
 
     def forward(self, x):
         x = self.features(x)
+        #print(x.size())
         x = x.view(x.size(0), 256 * 6 * 6)
+        #print(x.size())
         x = self.classifier(x)
         return x
