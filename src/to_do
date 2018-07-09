@@ -1,0 +1,26 @@
+# 07/08/2018
+
+Already Done:
+1. Extract images based on bbox and store them into their own directory.
+2. Make a json of the polygon sizes called vertex_count_segmentation_ids:
+    a. The key is the size of the polygon(number of vertices) and the value is the segmentation id. All of these
+     segmentation ids only have one polygon representing their segmentation.
+
+
+Finished on 07/08/2018
+1.  Get the size of every cropped image (height and width) and store them in some json.
+    a. The json key will be the tuple of (height, width) and the value will be a list of segmentation ids
+    b. Since json doesn't allow tuple as a key, I had to convert each tuple to a string. So str(100,112) for example
+
+
+
+Need to do:
+1. Use the above mentioned json to filter out images that are bad. The best way to do this currently is to consider the
+    size of the image.
+2. Look through vertex_count_segmentation_ids and find a key with a large number of segmentation ids.
+    a. Consider every segmentation id that has not been filtered out previously.
+    b. Resize these images to (224, 224) move them to a new folder.
+    c. Also resize the polygon for each image and store it in a json. The key will be the segmentation value and the
+    value will be the polygon as a list of values. Need to make sure that no vertex is out of bounds of the image.
+3. Resize the polygons for each segmentation with respect the crop.
+    a. Need to make sure no vertices are out of bounds.
