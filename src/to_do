@@ -1,4 +1,4 @@
-# 07/08/2018
+# 07/09/2018
 
 Already Done:
 1. Extract images based on bbox and store them into their own directory.
@@ -19,10 +19,19 @@ Finished on 07/08/2018
 
 Need to do:
 
+1. Need to have a way to cross-compare the vertex_count_segmentation_ids file with the bbox_crop_shape_ file
+    a. i.e. Need to get rid of some file that are not meeting a requirement, such as size.
+
+1. Resize the polygons for each segmentation with respect to the crop.
+    a. Need to make sure no vertices are out of bounds.
+    b. The y variable should all be <= the height and the x variables should be <= the width
+
 2. Look through vertex_count_segmentation_ids and find a key with a large number of segmentation ids.
     a. Consider every segmentation id that has not been filtered out previously.
     b. Resize these images to (224, 224) move them to a new folder.
     c. Also resize the polygon for each image and store it in a json. The key will be the segmentation value and the
     value will be the polygon as a list of values. Need to make sure that no vertex is out of bounds of the image.
-3. Resize the polygons for each segmentation with respect the crop.
-    a. Need to make sure no vertices are out of bounds.
+
+3. Probably should filter out images that are too thin or too wide. This is quite hard to get a good balance for though.
+    Could also filter out images that don't have enough pixels in either height or width, but again this is hard to
+    balance properly.
