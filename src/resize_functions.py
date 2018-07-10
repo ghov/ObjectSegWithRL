@@ -1,5 +1,6 @@
 # Develop functions that are useful in resizing the image and the corresponding polygon.
 # Assume that we are using data in same format as MSCOCO
+#
 
 import skimage.io as io
 import matplotlib.pyplot as plt
