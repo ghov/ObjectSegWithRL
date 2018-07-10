@@ -43,6 +43,8 @@ def resize_img_and_poly(image_file_path, new_shape, polygon):
         new_poly.append(polygon[i] * x_ratio)
         new_poly.append(polygon[i+1] * y_ratio)
 
+    adjust_poly_out_of_bounds(new_poly, width_new, width_old)
+
     return new_img, new_poly
 
 def adjust_poly_crop(bbox, polygon):
@@ -87,14 +89,14 @@ def cross_check_json(vertex_json_path, shape_json_path):
     with open(shape_json_path, 'r') as read_vertex:
         shape_json = json.load(read_vertex)
 
-    combined_shape_list = list()
+    combined_shape_set = set()
     # combine the shape_json
     for key in shape_json:
-        combined_shape_list.extend(shape_json[key])
+        combined_shape_set.update(shape_json[key])
 
     for key in vertex_json:
         for val in vertex_json[key]:
-            if val not in combined_shape_list:
+            if val not in combined_shape_set:
                 vertex_json[key].remove(val)
 
     return vertex_json

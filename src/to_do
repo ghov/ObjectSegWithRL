@@ -21,6 +21,8 @@ Need to do:
 
 1. Need to have a way to cross-compare the vertex_count_segmentation_ids file with the bbox_crop_shape_ file
     a. i.e. Need to get rid of some file that are not meeting a requirement, such as size.
+    b. Tried to do this, but it appears I fucked up. It looks like the bbox_crop_shape_gte10k file has 280669, while the
+    vertex_count_segmentation_ids_gte10k has 468207. Not sure what happened here, but need to revisit it.
 
 1. Resize the polygons for each segmentation with respect to the crop.
     a. Need to make sure no vertices are out of bounds.
