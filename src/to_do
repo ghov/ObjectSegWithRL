@@ -37,3 +37,8 @@ Need to do:
 3. Probably should filter out images that are too thin or too wide. This is quite hard to get a good balance for though.
     Could also filter out images that don't have enough pixels in either height or width, but again this is hard to
     balance properly.
+
+5. Need a way to put a segmentation mask on an image, just as in the coco functions.
+
+6. Need to have more images with the same number of vertices. x3 = (x1 + x2)/2 and y3 = (y1 + y2)/2. Might want to
+    consider points that are further away, though it may not matter.
