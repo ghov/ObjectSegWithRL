@@ -30,26 +30,71 @@ def resize_img_and_poly_dir(image_directory, polygon_json, filter_set, new_shape
         json.dump(new_poly_dict, write_file, indent=4)
 
 
-# Resize the image and resize the polygon associated with it
-def resize_img_and_poly(image_file_path, new_shape, polygon):
-    read_img = io.imread(image_file_path)
-    height_old, width_old = get_height_width(read_img)
+# Provide a set of segmentation_ids_list, the coco_instance, new_shape, polygon_json and return a new json with the resized
+# polygons
+def resize_polygon_batch(coco_instance, segmentation_ids_int_list, new_shape, polygon_json, new_poly_write_path):
+
+    new_poly = dict()
+
+    # Get the coco annotations for the instances
+    annotations = coco_instance.loadAnns(segmentation_ids_int_list)
+
+    # Loop through each annotation and get the bounding box
+    for ann in annotations:
+        height_old = ann['bbox'][3]
+        width_old = ann['bbox'][2]
+
+        new_poly[str(ann['id'])] = resize_polygon(polygon_json[str(ann['id'])], new_shape, (height_old, width_old))
+
+    with open(new_poly_write_path, 'w') as write_file:
+        json.dump(new_poly, write_file, indent=4)
+
+# Need to resize just the polygon
+def resize_polygon(polygon, new_shape, old_shape):
+
+    # Get the height and width of the old image shape
+    height_old, width_old = old_shape
+
+    # Get the height and width of the new_image shape
     height_new, width_new = new_shape
 
+    # Get the x and y ratios
     x_ratio = width_new / width_old
     y_ratio = height_new / height_old
 
-    new_img = resize(read_img, new_shape)
-
+    # initiate the list for the new polygon
     new_poly = list()
 
+    # Adjust the vertices and add them to the new polygon list
     for i in range(0, len(polygon), 2):
         new_poly.append(polygon[i] * x_ratio)
         new_poly.append(polygon[i + 1] * y_ratio)
 
-    adjust_poly_out_of_bounds(new_poly, width_new, height_new)
+    adjust_poly_out_of_bounds(new_poly,width_new, height_new)
 
-    return new_img, new_poly
+    return new_poly
+
+# Resize the image and resize the polygon associated with it
+def resize_img_and_poly(image_file_path, new_shape, polygon):
+    read_img = io.imread(image_file_path)
+    height_old, width_old = get_height_width(read_img)
+    #height_new, width_new = new_shape
+
+    #x_ratio = width_new / width_old
+    #y_ratio = height_new / height_old
+
+    new_img = resize(read_img, new_shape)
+
+    #new_poly = list()
+
+    #for i in range(0, len(polygon), 2):
+    #    new_poly.append(polygon[i] * x_ratio)
+    #    new_poly.append(polygon[i + 1] * y_ratio)
+
+    #adjust_poly_out_of_bounds(new_poly, width_new, height_new)
+
+    return new_img, resize_polygon(polygon, new_shape, (height_old, width_old))
+    #return new_img, new_poly
 
 
 def get_set_from_json(input_json):
