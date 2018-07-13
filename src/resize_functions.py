@@ -47,7 +47,7 @@ def resize_img_and_poly(image_file_path, new_shape, polygon):
         new_poly.append(polygon[i] * x_ratio)
         new_poly.append(polygon[i + 1] * y_ratio)
 
-    adjust_poly_out_of_bounds(new_poly, width_new, width_old)
+    adjust_poly_out_of_bounds(new_poly, width_new, height_new)
 
     return new_img, new_poly
 
@@ -64,6 +64,24 @@ def get_key_with_most_vals(in_dict):
     maxcount = max(len(v) for v in in_dict.values())
     return [k for k, v in in_dict.items() if len(v) == maxcount]
 
+# Provide a segmentation id, a image directory and a polygon json file.
+# The function will load the image, polygon and display the polygon over the image.
+def show_image_mask_by_id(coco_instance, segmentation_id, image_directory_path, polygon_json_file_path):
+
+    # Form the image path
+    image_path = image_directory_path + str(segmentation_id) + '.jpg'
+
+    # Load the image
+    temp_image = io.imread(image_path)
+
+    # Load the json file
+    with open(polygon_json_file_path, 'r') as read_file:
+        poly_json = json.load(read_file)
+
+    temp_list = list()
+    temp_list.append({'segmentation' : [poly_json[str(segmentation_id)]]})
+
+    show_image_with_mask(coco_instance, temp_image, temp_list)
 
 # Load the image and put the annotation on it. Then display it.
 def show_image_with_mask(coco_instance, image_np_arr, annotation):
@@ -97,7 +115,7 @@ def add_vertices_to_polygon(polygon, number_of_vertices):
         return polygon
     # If it is not of the desired length
     else:
-
+        return
 
 
 

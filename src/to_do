@@ -42,3 +42,6 @@ Need to do:
 
 6. Need to have more images with the same number of vertices. x3 = (x1 + x2)/2 and y3 = (y1 + y2)/2. Might want to
     consider points that are further away, though it may not matter.
+
+7. It looks like my boundary check on the poly resizing was wrong. The segmentation have the wrong y-limit. Need to re-do
+    that.
