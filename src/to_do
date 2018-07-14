@@ -16,6 +16,13 @@ Finished on 07/08/2018
     size of the image.
     a. The filter used was (height * width >=10,000) and the json was saved to data/bbox_crop_shape_gte10k.json
 
+Finished on 07/13/2018
+1. It looks like my boundary check on the poly resizing was wrong. The segmentation have the wrong y-limit. Need to re-do
+    that.
+2. Need a way to put a segmentation mask on an image, just as in the coco functions.
+3. Resize the polygons for each segmentation with respect to the crop.
+    a. Need to make sure no vertices are out of bounds.
+    b. The y variable should all be <= the height and the x variables should be <= the width
 
 Need to do:
 
@@ -24,9 +31,6 @@ Need to do:
     b. Tried to do this, but it appears I fucked up. It looks like the bbox_crop_shape_gte10k file has 280669, while the
     vertex_count_segmentation_ids_gte10k has 468207. Not sure what happened here, but need to revisit it.
 
-1. Resize the polygons for each segmentation with respect to the crop.
-    a. Need to make sure no vertices are out of bounds.
-    b. The y variable should all be <= the height and the x variables should be <= the width
 
 2. Look through vertex_count_segmentation_ids and find a key with a large number of segmentation ids.
     a. Consider every segmentation id that has not been filtered out previously.
@@ -38,10 +42,8 @@ Need to do:
     Could also filter out images that don't have enough pixels in either height or width, but again this is hard to
     balance properly.
 
-5. Need a way to put a segmentation mask on an image, just as in the coco functions.
+
 
 6. Need to have more images with the same number of vertices. x3 = (x1 + x2)/2 and y3 = (y1 + y2)/2. Might want to
     consider points that are further away, though it may not matter.
 
-7. It looks like my boundary check on the poly resizing was wrong. The segmentation have the wrong y-limit. Need to re-do
-    that.

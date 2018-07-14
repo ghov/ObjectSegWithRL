@@ -105,6 +105,9 @@ def get_set_from_json(input_json):
 
     return return_set
 
+#
+
+
 def get_key_with_most_vals(in_dict):
     maxcount = max(len(v) for v in in_dict.values())
     return [k for k, v in in_dict.items() if len(v) == maxcount]
@@ -195,7 +198,8 @@ def get_height_width(sci_img):
     return height, width
 
 
-
+# This is something we need to do after cropping an image. Simple subtract the vector from the left edge of the bounding
+#  box to the left edge of the original image.
 def adjust_poly_crop(bbox, polygon):
     poly_len = len(polygon)
     new_poly = list()
@@ -220,7 +224,10 @@ def adjust_poly_out_of_bounds(polygon, xmax, ymax):
 
         if(polygon[i+1] > ymax):
             polygon[i+1] = ymax
-
+# 0 is the smallest x.
+# 1 is the smallest y.
+# 2 is the width of the image
+# 3 is the height of the image.
 def get_coord_from_bbox(bbox):
     x1 = int(bbox[0])
     x2 = int(bbox[0] + bbox[2])
