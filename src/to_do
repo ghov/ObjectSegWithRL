@@ -42,8 +42,9 @@ Need to do:
     Could also filter out images that don't have enough pixels in either height or width, but again this is hard to
     balance properly.
 
-
-
 6. Need to have more images with the same number of vertices. x3 = (x1 + x2)/2 and y3 = (y1 + y2)/2. Might want to
     consider points that are further away, though it may not matter.
 
+7. Make a function to move a subset of images in a directory and a subset of polygon data in a json file.
+    Move the images to a new directory and make a new json with the subset information and save it in the same parent
+     folder
