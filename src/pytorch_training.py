@@ -74,6 +74,10 @@ def train(num_epochs):
         #train_acc = train_acc / 5960
         train_loss = train_loss / 5960
 
+        print(epoch)
+        print(train_acc)
+        print(train_loss)
+
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 

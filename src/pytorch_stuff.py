@@ -26,6 +26,11 @@ class GregDataset(Dataset):
         image_path = self.root_dir + seg_id + '.jpg'
         temp_img = imread(image_path)
 
+        # Check if it is greyscale
+        if len(temp_img.shape) == 2:
+            height, width = temp_img.shape
+            temp_img = np.resize(temp_img, (height, width, 3))
+
         poly = self.annotations[seg_id]
         poly_np = np.asarray(poly)
         poly_ann = poly_np.astype('float').reshape(-1, len(poly))
