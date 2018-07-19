@@ -29,7 +29,11 @@ print(greg_out.size())
 # print(soft(actions))
 # print(soft(classes))
 
+test_transformations = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
+])
 
 
 
