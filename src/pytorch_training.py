@@ -103,8 +103,12 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
+        torch.save(model.state_dict(),
+                   '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_' +
+                   str(train_loss))
+        
 def main():
-    train(100)
+    train(1)
 
 if __name__ == "__main__":
     main()
