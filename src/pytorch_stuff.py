@@ -35,7 +35,7 @@ class GregDataset(Dataset):
         poly_np = np.asarray(poly)
         poly_ann = poly_np.astype('float').reshape(-1, len(poly))
 
-        print(seg_id)
+        #print(seg_id)
         # Need to add access to a transform method
         if(self.transform):
             temp_img = self.transform(temp_img)

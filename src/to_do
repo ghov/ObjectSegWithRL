@@ -48,3 +48,7 @@ Need to do:
 7. Make a function to move a subset of images in a directory and a subset of polygon data in a json file.
     Move the images to a new directory and make a new json with the subset information and save it in the same parent
      folder
+
+8. Incorporate Dataloader into training.
+9. Incorporate cuda into training
+10. Incorporate model saving into training.

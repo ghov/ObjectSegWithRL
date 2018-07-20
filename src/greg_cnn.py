@@ -42,10 +42,10 @@ class GregNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(512, 256),
-            nn.ReLU(inplace=True),
+            #nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(256, 128),
-            nn.ReLU(inplace=True),
+            #nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(128, 2 * number_of_vertices),
         )
