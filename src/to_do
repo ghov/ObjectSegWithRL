@@ -59,3 +59,16 @@ image. Need to convert image to tensor and convert output to a list, convert to 
 
 9. Add a custom activation function to keep the values between 0 and the edge of the images, in this case 224
 10. Find a way to turn off dropout during training.
+11. Using sigmoid instead of ReLU results in no learning. Need to figure out why.
+12. Need to figure out how to continue learning with a saved model state.
+13. Need to normalize the images on training. Dataset class
+14. Figure out why so many are just a small shape in the middle of image. Probably due to my 0-224 resizing.
+    a. Actually, I'm thinking this might be a coco-problem. Because the shapes are the same.
+    This happens majority of the time
+    Another common thing is the polygon captures almost the whole image itself, or just a circle in the middle
+    Its either the artifact, a big circle or a big square.
+
+# Good polygon prediction segmentation from GregNet_MSELoss()_tensor(2504.4006)_RL_cS
+1. 1769492
+2. 343372
+3. 679781

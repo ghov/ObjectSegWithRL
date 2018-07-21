@@ -2,7 +2,7 @@ from torch.optim import Adam
 import torch.nn as nn
 import torch
 #from ObjectSegWithRL.src.greg_cnn import GregNet
-from ObjectSegWithRL.src.greg_cnn_all_Sigmoid import GregNet
+from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
 from ObjectSegWithRL.src.pytorch_stuff import GregDataset
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -112,7 +112,7 @@ def train(num_epochs):
                loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(500)
+    train(1000)
 
 if __name__ == "__main__":
     main()

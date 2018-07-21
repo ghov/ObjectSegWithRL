@@ -9,7 +9,8 @@ import json
 import numpy as np
 import torch
 #from ObjectSegWithRL.src.greg_cnn import GregNet
-from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
+#from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
+from pycocotools.coco import COCO
 
 # def import_resize_functions_jup():
 #     import sys
@@ -129,6 +130,17 @@ def convert_to_three_channel(image_as_numpy):
         # If the image already had three channels, then just return it.
         return image_as_numpy
 
+# Need a coco instance for lots of stuff, including showing annotation on image.
+def get_coco_instance(annotation_file=None):
+
+    # If no path is provided, just use the regular 2017 annotations
+    constant_ann_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/instances/instances_train2017.json'
+    if(annotation_file == None):
+        return COCO(constant_ann_path)
+
+    # If a path is provided, then use that annotation file.
+    return COCO(annotation_file)
+
 
 # function to take an image, produce a predicted polygon with a given model and display the segmentation on that image.
 #  Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
@@ -153,9 +165,19 @@ def show_predicted_segmentation_polygon(image_id, image_directory_path, model_st
 
     prediction = model_instance.forward(image_cuda.view((1, 3, 224, 224)))
     #prediction = model_instance.forward(torch.unsqueeze(image_cuda, 0))
+    prediction_cpu = torch.Tensor.cpu(prediction)
+    prediction_np = prediction_cpu.detach().numpy()
+    prediction_list = prediction_np.tolist()
 
-    return prediction
+    #print(prediction_list[0])
+    temp_list = list()
+    temp_list.append({'segmentation' : [prediction_list[0]]})
 
+    #io.imshow(io.imread(image_path))
+    #plt.show()
+    show_image_with_mask(coco_instance, temp_image, temp_list)
+
+    #return prediction
 
 def get_key_with_most_vals(in_dict):
     maxcount = max(len(v) for v in in_dict.values())
@@ -185,8 +207,11 @@ def show_image_with_mask(coco_instance, image_np_arr, annotation):
     # Commented code, just in case, the image is provided as a path and not a np_array
     #image = io.imread(image_np_arr)
     #plt.imshow(image)
+    #io.imshow(image_np_arr)
+    #plt.show()
 
     plt.imshow(image_np_arr)
+    #plt.show()
     coco_instance.showAnns(annotation)
 
 # If we only have one segmentation id, then we need to make a list and add it to the list.
@@ -315,10 +340,11 @@ def main():
     image_directory_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
     model_state_path = '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_MSELoss()_tensor(2504.4006)_RL_cS'
     model_instance = GregNet(15)
-    coco_instance = None
+    coco_instance = get_coco_instance()
 
-    print(show_predicted_segmentation_polygon(1078619, image_directory_path, model_state_path, model_instance, coco_instance))
-
+    model_instance.eval()
+    #print(show_predicted_segmentation_polygon(180232, image_directory_path, model_state_path, model_instance, coco_instance))
+    show_predicted_segmentation_polygon(698482, image_directory_path, model_state_path, model_instance, coco_instance)
 
 if __name__ == "__main__":
     main()
