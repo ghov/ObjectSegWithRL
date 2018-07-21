@@ -6,6 +6,10 @@ import skimage.io as io
 import matplotlib.pyplot as plt
 from skimage.transform import resize
 import json
+import numpy as np
+import torch
+#from ObjectSegWithRL.src.greg_cnn import GregNet
+from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
 
 # def import_resize_functions_jup():
 #     import sys
@@ -13,6 +17,10 @@ import json
 #     sys.path.insert(0, os.path.abspath('..'))
 #
 #     from resize_functions import *
+
+
+
+
 
 # Resize image and filter as a batch.
 def resize_img_and_poly_dir(image_directory, polygon_json, filter_set, new_shape, image_write_directory,
@@ -105,7 +113,48 @@ def get_set_from_json(input_json):
 
     return return_set
 
-#
+# Since our model expects images with three channels, we need to resize greyscale images to have three channels
+def convert_to_three_channel(image_as_numpy):
+    # Check if it is greyscale
+    if len(image_as_numpy.shape) == 2:
+        # If there are only two dimensions, then it only has height and width
+        height, width = image_as_numpy.shape
+
+        # Resize the image to have three channels
+        temp_img = np.resize(image_as_numpy, (height, width, 3))
+
+        # Return the  new resized image
+        return temp_img
+    else:
+        # If the image already had three channels, then just return it.
+        return image_as_numpy
+
+
+# function to take an image, produce a predicted polygon with a given model and display the segmentation on that image.
+#  Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
+def show_predicted_segmentation_polygon(image_id, image_directory_path, model_state_path, model_instance, coco_instance):
+
+    # Load the image
+    # Form the full image path
+    image_path = image_directory_path + str(image_id) + '.jpg'
+
+    # Read the image as a numpy array
+    # Check if the image has three channels. If not, resize it for three channels.
+    temp_image = convert_to_three_channel(io.imread(image_path))
+
+    # make the model use the gpu
+    model_instance.cuda()
+
+    # Load the model
+    model_instance.load_state_dict(torch.load(model_state_path))
+
+    # convert the image to a cuda float tensor
+    image_cuda = torch.Tensor.cuda(torch.from_numpy(temp_image)).float()
+
+    prediction = model_instance.forward(image_cuda.view((1, 3, 224, 224)))
+    #prediction = model_instance.forward(torch.unsqueeze(image_cuda, 0))
+
+    return prediction
 
 
 def get_key_with_most_vals(in_dict):
@@ -258,9 +307,18 @@ def cross_check_json(vertex_json_path, shape_json_path):
     return vertex_json
 
 def main():
-    bbox_crop_dir = '/media/greghovhannisyan/BackupData1/mscoco/images/train2017_crop_bbox/'
-    sample_ann_id = 1874298
-    new_img, new_poly = resize_img_and_poly()
+    #bbox_crop_dir = '/media/greghovhannisyan/BackupData1/mscoco/images/train2017_crop_bbox/'
+    #sample_ann_id = 1874298
+    #new_img, new_poly = resize_img_and_poly()
+    #image_id, image_directory_path, model_state_path, model_instance, coco_instance
+
+    image_directory_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
+    model_state_path = '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_MSELoss()_tensor(2504.4006)_RL_cS'
+    model_instance = GregNet(15)
+    coco_instance = None
+
+    print(show_predicted_segmentation_polygon(1078619, image_directory_path, model_state_path, model_instance, coco_instance))
+
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,8 @@
 from torch.optim import Adam
 import torch.nn as nn
 import torch
-from ObjectSegWithRL.src.greg_cnn import GregNet
+#from ObjectSegWithRL.src.greg_cnn import GregNet
+from ObjectSegWithRL.src.greg_cnn_all_Sigmoid import GregNet
 from ObjectSegWithRL.src.pytorch_stuff import GregDataset
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -26,7 +27,8 @@ test_transformations = transforms.Compose([
 
 optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 
-loss_fn = nn.L1Loss().cuda()
+loss_fn = nn.MSELoss().cuda()
+#loss_fn = nn.L1Loss().cuda()
 
 annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
 root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
@@ -39,6 +41,8 @@ def train(num_epochs):
     best_acc = 0.0
     cuda_avail = torch.cuda.is_available()
 
+    train_loss = 0.0
+
     if cuda_avail:
         model.cuda()
         #print("yes")
@@ -46,7 +50,7 @@ def train(num_epochs):
     for epoch in range(num_epochs):
         model.train()
         train_acc = 0.0
-        train_loss = 0.0
+        #train_loss = 0.0
         for i, (images, labels) in enumerate(my_dataloader):
             #print(str(i))
             # Move images and labels to gpu if available
@@ -103,12 +107,12 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
-        torch.save(model.state_dict(),
-                   '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_' +
-                   str(train_loss))
-        
+    torch.save(model.state_dict(),
+               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_' +
+               loss_fn.__str__() + "_" + str(train_loss))
+
 def main():
-    train(1)
+    train(500)
 
 if __name__ == "__main__":
     main()

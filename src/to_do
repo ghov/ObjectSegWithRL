@@ -24,6 +24,11 @@ Finished on 07/13/2018
     a. Need to make sure no vertices are out of bounds.
     b. The y variable should all be <= the height and the x variables should be <= the width
 
+Finished on 07/19/2018
+1. Incorporate Dataloader into training.
+2. Incorporate cuda into training
+3. Incorporate model saving into training.
+
 Need to do:
 
 1. Need to have a way to cross-compare the vertex_count_segmentation_ids file with the bbox_crop_shape_ file
@@ -49,6 +54,8 @@ Need to do:
     Move the images to a new directory and make a new json with the subset information and save it in the same parent
      folder
 
-8. Incorporate Dataloader into training.
-9. Incorporate cuda into training
-10. Incorporate model saving into training.
+8. Add a function to take an image, produce a predicted polygon with a given model and display the segmentation on that
+image. Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
+
+9. Add a custom activation function to keep the values between 0 and the edge of the images, in this case 224
+10. Find a way to turn off dropout during training.
