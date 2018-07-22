@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 import json
 from skimage.io import imread
 import numpy as np
+from torch import from_numpy
 
 class GregDataset(Dataset):
 
@@ -40,9 +41,11 @@ class GregDataset(Dataset):
         if(self.transform):
             temp_img = self.transform(temp_img)
             #poly_ann = self.transform(poly_ann)
-
+        #print(temp_img.shape)
+        #print(from_numpy(temp_img).shape)
 
         return temp_img, poly_ann
+        #return from_numpy(temp_img), poly_ann
 
 
 def main():

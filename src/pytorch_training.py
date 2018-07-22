@@ -30,8 +30,11 @@ optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 loss_fn = nn.MSELoss().cuda()
 #loss_fn = nn.L1Loss().cuda()
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
-root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
+root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/'
+
+#annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
+#root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
 
 dataset = GregDataset(annotation_file_path, root_dir_path, transform=test_transformations)
 
@@ -112,7 +115,7 @@ def train(num_epochs):
                loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(1000)
+    train(100)
 
 if __name__ == "__main__":
     main()

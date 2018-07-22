@@ -95,7 +95,8 @@ class GregNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(128, 2 * number_of_vertices),
-            nSigmoid(224),
+            #nSigmoid(224),
+            nn.ReLU(inplace=True)
             #nReLU(224, inplace=True),
         )
 

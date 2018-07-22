@@ -24,10 +24,24 @@ Finished on 07/13/2018
     a. Need to make sure no vertices are out of bounds.
     b. The y variable should all be <= the height and the x variables should be <= the width
 
+Finished on 07/17/2018
+7. Make a function to move a subset of images in a directory and a subset of polygon data in a json file.
+    Move the images to a new directory and make a new json with the subset information and save it in the same parent
+     folder
+
 Finished on 07/19/2018
 1. Incorporate Dataloader into training.
 2. Incorporate cuda into training
 3. Incorporate model saving into training.
+
+Finished on 07/20/2018
+9. Add a custom activation function to keep the values between 0 and the edge of the images, in this case 224
+10. Find a way to turn off dropout during training.
+
+Finished on 07/21/2018
+8. Add a function to take an image, produce a predicted polygon with a given model and display the segmentation on that
+image. Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
+
 
 Need to do:
 
@@ -50,15 +64,7 @@ Need to do:
 6. Need to have more images with the same number of vertices. x3 = (x1 + x2)/2 and y3 = (y1 + y2)/2. Might want to
     consider points that are further away, though it may not matter.
 
-7. Make a function to move a subset of images in a directory and a subset of polygon data in a json file.
-    Move the images to a new directory and make a new json with the subset information and save it in the same parent
-     folder
 
-8. Add a function to take an image, produce a predicted polygon with a given model and display the segmentation on that
-image. Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
-
-9. Add a custom activation function to keep the values between 0 and the edge of the images, in this case 224
-10. Find a way to turn off dropout during training.
 11. Using sigmoid instead of ReLU results in no learning. Need to figure out why.
 12. Need to figure out how to continue learning with a saved model state.
 13. Need to normalize the images on training. Dataset class
@@ -72,3 +78,4 @@ image. Need to convert image to tensor and convert output to a list, convert to 
 1. 1769492
 2. 343372
 3. 679781
+4. 2119418
