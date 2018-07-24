@@ -175,6 +175,7 @@ def show_predicted_segmentation_polygon(image_id, image_directory_path, model_st
 
     #io.imshow(io.imread(image_path))
     #plt.show()
+    print(prediction_list)
     show_image_with_mask(coco_instance, temp_image, temp_list)
 
     #return prediction
