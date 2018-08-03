@@ -73,6 +73,8 @@ Need to do:
     This happens majority of the time
     Another common thing is the polygon captures almost the whole image itself, or just a circle in the middle
     Its either the artifact, a big circle or a big square.
+15. Remember that ToTensor change the shape of the array from (H x W x C) to (C x H x W)
+
 
 # Good polygon prediction segmentation from GregNet_MSELoss()_tensor(2504.4006)_RL_cS
 1. 1769492

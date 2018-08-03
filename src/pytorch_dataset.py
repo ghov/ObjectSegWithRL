@@ -38,8 +38,8 @@ class GregDataset(Dataset):
 
         #print(seg_id)
         # Need to add access to a transform method
-        if(self.transform):
-            temp_img = self.transform(temp_img)
+        #if(self.transform):
+        #    temp_img = self.transform(temp_img)
             #poly_ann = self.transform(poly_ann)
         #print(temp_img.shape)
         #print(from_numpy(temp_img).shape)

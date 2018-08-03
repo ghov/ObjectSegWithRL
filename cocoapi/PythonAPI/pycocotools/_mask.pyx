@@ -196,7 +196,7 @@ def iou( dt, gt, pyiscrowd ):
         return objs
     def _rleIou(RLEs dt, RLEs gt, np.ndarray[np.uint8_t, ndim=1] iscrowd, siz m, siz n, np.ndarray[np.double_t,  ndim=1] _iou):
         rleIou( <RLE*> dt._R, <RLE*> gt._R, m, n, <byte*> iscrowd.data, <double*> _iou.data )
-    def _bbIou(np.ndarray[np.double_t, ndim=2] dt, np.ndarray[np.double_t, ndim=2] gt, np.ndarray[np.uint8_t, ndim=1] iscrowd, siz m, siz n, np.ndarray[np.double_t, ndim=1] _iou):
+    def _bbIou(np.ndarray[np.double_t, ndim=2] dt, np.ndarray[np.double_t., ndim=2] gt, np.ndarray[np.uint8_t, ndim=1] iscrowd, siz m, siz n, np.ndarray[np.double_t, ndim=1] _iou):
         bbIou( <BB> dt.data, <BB> gt.data, m, n, <byte*> iscrowd.data, <double*>_iou.data )
     def _len(obj):
         cdef siz N = 0

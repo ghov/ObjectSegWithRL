@@ -6,6 +6,7 @@ from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
 from ObjectSegWithRL.src.pytorch_stuff import GregDataset
 from torchvision import transforms
 from torch.utils.data import DataLoader
+import numpy as np
 
 cuda_avail = torch.cuda.is_available()
 
@@ -30,8 +31,8 @@ optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.000001)
 loss_fn = nn.MSELoss().cuda()
 #loss_fn = nn.L1Loss().cuda()
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
-root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
+root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/'
 
 #annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
 #root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
@@ -55,8 +56,19 @@ def train(num_epochs):
         train_acc = 0.0
         #train_loss = 0.0
         for i, (images, labels) in enumerate(my_dataloader):
+            print(type(my_dataloader))
+            print(type(images))
+            print(images.numpy().shape)
             #print(str(i))
             # Move images and labels to gpu if available
+            mean = np.mean(images.numpy(), axis=(0, 1, 2)).tolist()
+
+            std = np.std(images.numpy(), axis=(0, 1, 2)).tolist()
+
+            t = transforms.Normalize(mean=mean, std=std)
+
+            t(torch.from_numpy(images).view(3,224,224))
+
             if cuda_avail:
                 #print(images.type())
                 #print(labels.type())
@@ -65,7 +77,8 @@ def train(num_epochs):
 
                 #images = torch.Tensor(images)
                 #labels = torch.Tensor(labels)
-                images = torch.Tensor.cuda((images.cuda()))
+                images = torch.Tensor.cuda((images.cuda())).view(2,3,224,224).float()
+                print(images.type())
                 labels = torch.Tensor.cuda((labels.cuda())).float()
 
             # Clear all accumulated gradients
@@ -81,7 +94,7 @@ def train(num_epochs):
             #print(labels.type())
             #print(labels.shape)
             height, _, width = labels.shape
-            loss = loss_fn(outputs, labels.view(height,30))
+            loss = loss_fn(outputs, labels.view(height, 30))
             # Backpropagate the loss
             loss.backward()
 

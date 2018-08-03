@@ -21,7 +21,15 @@ from pycocotools.coco import COCO
 
 
 
+# The annotations in mscoco are stored as a dictionary, under the key 'segmentation'. The value is a [[]].
+# So we need to make sure that polygon used with 'segmentation' is in this format
+def check_segmentation_polygon(polygon):
 
+    # If the polygon is just a list, then put it in a list.
+    if(type(polygon[0]) != list):
+        return [polygon]
+    else:
+        return polygon
 
 # Resize image and filter as a batch.
 def resize_img_and_poly_dir(image_directory, polygon_json, filter_set, new_shape, image_write_directory,
@@ -217,7 +225,7 @@ def show_image_with_mask(coco_instance, image_np_arr, annotation):
 
 # If we only have one segmentation id, then we need to make a list and add it to the list.
 # All of the ids must be integer. not string
-# seg_id is either a list of a single variable
+# seg_id is either a list or a single variable
 def check_annotation_id(seg_id):
     if(type(seg_id) is list):
         return list

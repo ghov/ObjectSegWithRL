@@ -1,0 +1,43 @@
+state = a vector of 1 by n, where n is 2*number of vertices.
+reward = the value of taking an action
+action = a movement of a vertex in the predefined direction by a predefined amount.
+action-reward vector = a vector where each value is the reward for taking that action, given a certain state.
+    = we assume that the action with the highest reward will be chosen, given a state.
+
+
+
+
+label = These are produced at run time. Given a state, take each action and get the reward after taking that action.
+    = The reward is a vector of size 1 by actions.
+
+
+
+FLOW:
+1. An initial state is generated, in this case a polygon. This can be random or can include the entire image at first.
+2. Feed the image into a cnn, which generates a vector of features.
+3. Concatenate these features with the t-1 state vector.
+4. This is used as input for the estimator network, which produces a (1 by number of actions) vector as output, where
+each value in the vector is the estimated reward of taking that action, given the current state.
+5. To generate a dynamic label, take the current state and apply each possible action to that state. Then, take the
+new iou minus the old iou and return that as the reward.
+6. Use regular loss, like mse to compare the dynamic label with the output of the evaluator network. Use this to
+backpropogate and learn
+7. Take softmax of the estimated reward matrix and get the index of the largest value. Get the action associated with
+this index and apply it to the current state. Save this as the new state.
+8. Also compute the IoU of this new state with the ground truth.
+9. Stop training after reaching some predefined number of max steps or until a stop action is chosen.
+10. We need to get to a point where every predicted reward is negative, except for the stop action.
+Or every reward is smaller than the stop action.
+
+
+
+# Notes:
+1. It looks like coco can compute iou from segmentation poly, without needing to convert to mask. But may need
+segmentations of the same size.
+2. Need to make a version of annToRLE from coco.py that takes as input the height and width.
+
+
+
+
+
+
