@@ -155,7 +155,7 @@ def main():
     print(convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True))
     rles = convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True)
     print(get_RLE_iou(a_rle, a_rle))
-    #print(get_RLE_iou_list(rles, a_rle))
+    print(get_RLE_iou_list(rles, a_rle))
 
 if __name__ == "__main__":
     main()
