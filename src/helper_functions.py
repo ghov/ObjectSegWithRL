@@ -139,7 +139,8 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
 # Compute the IoU of each of these polygons with the ground truth
 # Compute the reward for each IoU by comparing it with the IoU of the original polygon.
 # Store these values in a numpy ndarray of (1 X length of polygon)
-def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polygon, height, width, coco_instance):
+def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polygon, height, width, coco_instance,
+                                      step_cost = None, stop_reward = None):
 
     # Convert the ground truth polygon to RLE
     ground_truth_rle = convert_polygon_to_compressed_RLE(coco_instance, ground_truth_polygon, height, width)
@@ -158,6 +159,15 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
 
     # Compute the rewards for the new rles
     reward_list = get_reward_list_from_iou_list(100, 1.0, iou_list)
+
+    # Adjust for the step cost if needed
+    if(step_cost != None):
+        for i in range(0, len(reward_list)):
+            reward_list[i] += step_cost
+
+    # Add the stop action reward if needed
+    if(stop_reward != None):
+        reward_list.append(stop_reward)
 
     return np.array(reward_list)
 

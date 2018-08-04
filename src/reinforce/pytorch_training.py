@@ -103,9 +103,10 @@ def train(num_epochs):
 
 
                 # Get the label, by taking all actions on previous state
-                reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,, height_initial, width_initial, coco)
+                reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,
+                labels.numpy().to_list(), height_initial, width_initial, coco)
 
-
+                reward_tensor = reward_np
 
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
