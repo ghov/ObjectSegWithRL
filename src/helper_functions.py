@@ -67,7 +67,16 @@ def convert_polygon_to_compressed_RLE(coco_instance, polygon_as_list, height, wi
         return new_rle_list
 
 
-# Need to turn a list of polygons into a list of compressed RLE dictionaries
+# For each RLE in RLE_list, get the IoU of it and RLE_comparison.
+# Return a list of IoUs
+def get_RLE_iou_list(RLE_list, RLE_comparison):
+
+    iou_list = list()
+
+    for rle in RLE_list:
+        iou_list.append(get_RLE_iou(rle, RLE_comparison))
+
+    return iou_list
 
 # Need to get a floating point value representation of the IoU between two RLE format objects
 def get_RLE_iou(RLE_a, RLE_b):
@@ -129,6 +138,9 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     new_polygons = get_changed_polygons_from_polygons(polygon, change_amount)
 
     # Convert the new_polygons to RLE format.
+    rle_polygons = convert_polygon_to_compressed_RLE(coco_instance, new_polygons, height, width, multiple=True)
+
+    # Compute the IoU for the rle_polygons
 
 
 def main():
