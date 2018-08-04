@@ -119,6 +119,8 @@ def get_reward_list_from_iou_list(reward_multiplier, previous_iou, new_iou_list)
     for iou in new_iou_list:
         reward_list.append(get_reward_from_iou(reward_multiplier, previous_iou, iou))
 
+    return reward_list
+
 # Given the previous IoU and the new IoU, we need to take the difference of the two and return an appropriate reward.
 def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
 
@@ -126,6 +128,8 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
     iou_dif = new_iou - previous_iou
 
     reward = reward_multiplier * iou_dif
+
+    return reward
 
 # Provide a polygon, an amount, and a ground truth polygon
 # Convert the ground truth polygon to RLE format
@@ -168,6 +172,8 @@ def main():
     rles = convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True)
     print(get_RLE_iou(a_rle, a_rle))
     print(get_RLE_iou_list(rles, a_rle))
+    iou_list = get_RLE_iou_list(rles, a_rle)
+    print(get_reward_list_from_iou_list(100, 1.0, iou_list))
 
 if __name__ == "__main__":
     main()
