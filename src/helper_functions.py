@@ -109,6 +109,15 @@ def get_iou_from_np_segmentation(ground_truth_segmentation_np_image, predicted_s
 def get_segmentation_image_from_polygon(polygon_numpy_vector):
     return None
 
+# For each value in the new_iou_list, get the reward by comparing it with the previous IoU
+# return a list of rewards
+def get_reward_list_from_iou_list(reward_multiplier, previous_iou, new_iou_list):
+
+    # Instantiate the reward_list
+    reward_list = list()
+
+    for iou in new_iou_list:
+        reward_list.append(get_reward_from_iou(reward_multiplier, previous_iou, iou))
 
 # Given the previous IoU and the new IoU, we need to take the difference of the two and return an appropriate reward.
 def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
@@ -141,6 +150,9 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     rle_polygons = convert_polygon_to_compressed_RLE(coco_instance, new_polygons, height, width, multiple=True)
 
     # Compute the IoU for the rle_polygons
+    iou_list = get_RLE_iou_list(rle_polygons, ground_truth_rle)
+
+    #
 
 
 def main():
