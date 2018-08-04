@@ -86,6 +86,8 @@ def train(num_epochs):
                 if(step_counter == 0):
                     previous_state = initial_state
 
+                # Get the initial IoU
+
                 # Clear all accumulated gradients
                 optimizer.zero_grad()
                 # Predict classes using images from the test set

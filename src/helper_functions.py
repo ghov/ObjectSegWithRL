@@ -100,6 +100,18 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
 
     reward = reward_multiplier * iou_dif
 
+# Provide a polygon, an amount, and a ground truth polygon
+# Convert the ground truth polygon to RLE format
+# Compute the IoU of the ground truth polygon
+# Generate a list of polygons by applying that amount to each scalar of the polygon
+# Convert these new polygons to RLE format
+# Compute the IoU of each of these polygons with the ground truth
+# Compute the reward for each IoU by comparing it with the IoU of the original polygon.
+# Store these values in a numpy ndarray of (1 X length of polygon)
+def get_np_reward_vector_from_polygon(polygon, amount, ground_truth_polygon):
+
+
+
 
 def main():
     a = [0, 0, 0, 0, 0, 0]
