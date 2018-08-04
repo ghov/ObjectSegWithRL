@@ -1,7 +1,7 @@
 # Functions to help with the rnn/reinforcement learning
 
 import numpy as np
-from .resize_functions import get_coco_instance, get_height_width, check_segmentation_polygon
+from ObjectSegWithRL.src.resize_functions import get_coco_instance, get_height_width, check_segmentation_polygon
 # Need to import mask from coco
 from ObjectSegWithRL.cocoapi.PythonAPI.pycocotools import mask
 
@@ -99,3 +99,16 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
     iou_dif = new_iou - previous_iou
 
     reward = reward_multiplier * iou_dif
+
+
+def main():
+    a = [0, 0, 0, 0, 0, 0]
+    b = get_changed_polygons_from_polygons(a, 1)
+    print(np.asarray(b))
+    coco = get_coco_instance()
+    print(check_segmentation_polygon(a))
+    print(convert_polygon_to_compressed_RLE(coco, a, 224, 224))
+
+
+if __name__ == "__main__":
+    main()

@@ -16,6 +16,7 @@ polygon_state_length = 8
 height_initial = 224
 width_initial = 224
 max_steps = 100
+stop_action_reward = 0.00001
 #height, width = (224, 224)
 
 
@@ -41,8 +42,8 @@ optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 loss_fn = nn.MSELoss().cuda()
 #loss_fn = nn.L1Loss().cuda()
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
-root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
+root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/'
 
 #annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
 #root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
@@ -67,44 +68,13 @@ def train(num_epochs):
     for epoch in range(num_epochs):
         model.train()
         train_acc = 0.0
-        #train_loss = 0.0
         for i, (images, labels) in enumerate(my_dataloader):
 
-            print(type(my_dataloader))
-            print(type(images))
-            print(images.numpy().shape)
-            # print(str(i))
-            # Move images and labels to gpu if available
-
-            # Calculate the mean
-            mean = np.mean(images.numpy(), axis=(0, 1, 2)).tolist()
-
-            # Calculate the standard deviation
-            std = np.std(images.numpy(), axis=(0, 1, 2)).tolist()
-
-            # Construct the normalizatin object with the above mean and standard deviation
-            t = transforms.Normalize(mean=mean, std=std)
-
-            # Don't know what this is
-            t(torch.from_numpy(images).view(3, 224, 224))
 
             if cuda_avail:
+
+                images = torch.Tensor.cuda((images.cuda())).view(1, 3, 224, 224).float()
                 #print(images.type())
-                #print(labels.type())
-                #print(images.cuda().type())
-                #print(labels.cuda().type())
-
-                #images = torch.Tensor(images)
-                #labels = torch.Tensor(labels)
-                images = torch.Tensor.cuda((images.cuda())).view(2, 3, 224, 224).float()
-                print(images.type())
-                #labels = torch.Tensor.cuda((labels.cuda())).float()
-
-
-
-            # If
-
-
 
             # Need to continue training on one image until either a stop action is chosen or we have exceeded the
             # maximum number of steps allowed.
@@ -113,6 +83,9 @@ def train(num_epochs):
 
             while((not stop_action) or (step_counter < max_steps)):
 
+                if(step_counter == 0):
+                    previous_state = initial_state
+
                 # Clear all accumulated gradients
                 optimizer.zero_grad()
                 # Predict classes using images from the test set
@@ -120,11 +93,16 @@ def train(num_epochs):
                 # print(images.shape)
 
                 outputs = model.forward(images, previous_state)
+
+                # Get the predicted action
+
+
+                # Get the label, by taking all actions on previous state
+
+
+
+
                 # outputs = model.forward(torch.unsqueeze(images, 0))
-                # Compute the loss based on the predictions and actual labels
-                # print(outputs.type())
-                # print(labels.type())
-                # print(labels.shape)
                 height, _, width = labels.shape
                 loss = loss_fn(outputs, labels.view(height, 30))
                 # Backpropagate the loss
@@ -136,13 +114,8 @@ def train(num_epochs):
                 train_loss += loss.cpu().data[0] * images.size(0)
                 _, prediction = torch.max(outputs.data, 1)
 
-                # print(outputs.shape)
-                # print(prediction.type())
-                # print(labels.data.type())
-                # print(labels.shape)
-                # print(prediction.shape)
+
                 train_acc += torch.sum(outputs.data == labels.data)
-                # train_acc += torch.sum(prediction == labels.data)
 
 
 
