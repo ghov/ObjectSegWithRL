@@ -59,6 +59,6 @@ class GregNet(nn.Module):
         #print(x.size())
         #print(previous_state.size())
 
-        x = self.classifier(cat((x, previous_state.view(1,16)), 1))
+        x = self.classifier(cat((x, previous_state.view(1, 8)), 1))
         #print(x.shape)
         return x

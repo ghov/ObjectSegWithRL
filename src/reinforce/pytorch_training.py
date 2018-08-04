@@ -6,7 +6,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
 from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon,\
-    get_new_polygon_vector
+    get_new_polygon_vector, apply_action_index_to_state
 from ObjectSegWithRL.src.pytorch_dataset import GregDataset
 from ObjectSegWithRL.src.resize_functions import get_coco_instance
 
@@ -143,7 +143,7 @@ def train(num_epochs):
                 step_counter += 1
 
                 # Make the new state the previous state
-                previous_state = get_new_polygon_vector(previous_state, coordinate_action_change_amount, prediction)
+                previous_state = apply_action_index_to_state(previous_state, coordinate_action_change_amount, prediction)
                 print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images

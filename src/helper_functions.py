@@ -16,6 +16,9 @@ coordinate_action_change_amount = 10
 # each point of the vertex has two actions
 def apply_action_index_to_state(state_polygon, change_amount, action_index):
 
+    if(len(state_polygon) == action_index/2):
+        return state_polygon
+
     new_state_poly = state_polygon.copy()
 
     # If the index is even, then we add to that index/2.
@@ -32,36 +35,59 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index):
 def get_initial_state(height, width):
 
     # Instantiate and populate the list
-    temp = list([0, 0, width/2, 0, width, 0, width, height/2, width, height, width/2, height, 0, height, 0, height/2])
+    temp = list([0, 0, width, 0, width, height, 0, height])
+    #temp = list([0, 0, width/2, 0, width, 0, width, height/2, width, height, width/2, height, 0, height, 0, height/2])
 
     return temp
 
 # given a polygon vector, index, and amount.
 # change the value of the x, y scalars at that index by the amount.
-def get_new_polygon_vector(old_vector_np, amount, index):
+def get_new_polygon_vector(old_vector_list, amount, index):
 
-    if(len(old_vector_np) == index):
-        return old_vector_np
+    if(len(old_vector_list) == index):
+        return old_vector_list
 
-    new_vector = old_vector_np.copy()
+    new_vector = old_vector_list.copy()
     new_vector[index] = new_vector[index] + amount
 
     return new_vector
 
 # Given a polygon vector and a change amount, we need to change every value of each scalar in the vector by that amount
 # and return a list of these vectors.
-def get_changed_polygons_from_polygons(previous_polygon, change_amount):
+# So we should have len(list of poly) * 2 results
+def get_changed_polygons_from_polygon(previous_polygon, change_amount):
 
     # instantiate the new list of polygons
     new_polygon_list = list()
 
     # Go through each element of the polygon list and change it by the amount.
     # Each change should result in a new polygon.
-    for index, val in enumerate(previous_polygon):
-        # Make a copy of the previous_polygon.
+    new_len = len(previous_polygon)
+
+    for i in range(0, new_len):
+        # Make a copy of the original
         temp_p = previous_polygon.copy()
-        temp_p[index] = previous_polygon[index] + change_amount
+
+        # Add the amount to the even index
+        temp_p[i] += change_amount
+
+        # Add this polygon to the list of polygons
         new_polygon_list.append(temp_p)
+
+        # Make a copy of the original
+        temp_p = previous_polygon.copy()
+
+        # Subtract the amount from the add index
+        temp_p[i] -= change_amount
+
+        # Add this polygon to the list of polygons
+        new_polygon_list.append(temp_p)
+
+    # for index, val in enumerate(previous_polygon):
+    #     # Make a copy of the previous_polygon.
+    #     temp_p = previous_polygon.copy()
+    #     temp_p[index] = previous_polygon[index] + change_amount
+    #     new_polygon_list.append(temp_p)
 
     return new_polygon_list
 
@@ -162,7 +188,7 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     ground_truth_IoU = 1.0
 
     # get_changed_polygons_from_polygons
-    new_polygons = get_changed_polygons_from_polygons(polygon, change_amount)
+    new_polygons = get_changed_polygons_from_polygon(polygon, change_amount)
 
     # Convert the new_polygons to RLE format.
     rle_polygons = convert_polygon_to_compressed_RLE(coco_instance, new_polygons, height, width, multiple=True)
@@ -186,7 +212,7 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
 
 def main():
     a = [0, 0, 0, 0, 0, 0]
-    b = get_changed_polygons_from_polygons(a, 1)
+    b = get_changed_polygons_from_polygon(a, 1)
     print(np.asarray(b))
     coco = get_coco_instance()
 
