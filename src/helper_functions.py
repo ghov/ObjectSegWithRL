@@ -156,8 +156,10 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     # Compute the IoU for the rle_polygons
     iou_list = get_RLE_iou_list(rle_polygons, ground_truth_rle)
 
-    #
+    # Compute the rewards for the new rles
+    reward_list = get_reward_list_from_iou_list(100, 1.0, iou_list)
 
+    return np.array(reward_list)
 
 def main():
     a = [0, 0, 0, 0, 0, 0]
@@ -174,6 +176,8 @@ def main():
     print(get_RLE_iou_list(rles, a_rle))
     iou_list = get_RLE_iou_list(rles, a_rle)
     print(get_reward_list_from_iou_list(100, 1.0, iou_list))
+
+    print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco))
 
 if __name__ == "__main__":
     main()

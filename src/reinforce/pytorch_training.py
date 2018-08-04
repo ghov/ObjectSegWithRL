@@ -5,8 +5,9 @@ from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
-from ObjectSegWithRL.src.helper_functions import get_initial_state
+from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon
 from ObjectSegWithRL.src.pytorch_dataset import GregDataset
+from ObjectSegWithRL.src.resize_functions import get_coco_instance
 
 reward_multiplier = 100
 step_cost = -0.5
@@ -51,6 +52,8 @@ root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/tem
 dataset = GregDataset(annotation_file_path, root_dir_path, transform=test_transformations)
 
 my_dataloader = DataLoader(dataset, batch_size=1, num_workers=4)
+
+coco = get_coco_instance()
 
 def train(num_epochs):
     best_acc = 0.0
@@ -100,7 +103,7 @@ def train(num_epochs):
 
 
                 # Get the label, by taking all actions on previous state
-
+                reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,, height_initial, width_initial, coco)
 
 
 
