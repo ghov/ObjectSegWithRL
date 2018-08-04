@@ -53,9 +53,22 @@ def get_changed_polygons_from_polygons(previous_polygon, change_amount):
     return new_polygon_list
 
 # Need to turn a polygon into compressed RLE format
-def convert_polygon_to_compressed_RLE(coco_instance, polygon_as_list, height, width):
+def convert_polygon_to_compressed_RLE(coco_instance, polygon_as_list, height, width, multiple=False):
 
-    return coco_instance.annToRLE_hw({'segmentation' : check_segmentation_polygon(polygon_as_list)}, height, width)
+    if not multiple:
+        return coco_instance.annToRLE_hw({'segmentation': check_segmentation_polygon(polygon_as_list)}, height, width)
+    else:
+        # Instantiate a new list to store the results
+        new_rle_list = list()
+
+        # Get length of the polygon list:
+        p_len = len(polygon_as_list)
+
+        for poly in polygon_as_list:
+            new_rle_list.append(coco_instance.annToRLE_hw({'segmentation': check_segmentation_polygon(poly)}
+                                                          , height, width))
+
+        return new_rle_list
 
 
 # Need to turn a list of polygons into a list of compressed RLE dictionaries
@@ -108,9 +121,18 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
 # Compute the IoU of each of these polygons with the ground truth
 # Compute the reward for each IoU by comparing it with the IoU of the original polygon.
 # Store these values in a numpy ndarray of (1 X length of polygon)
-def get_np_reward_vector_from_polygon(polygon, amount, ground_truth_polygon):
+def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polygon, height, width, coco_instance):
 
+    # Convert the ground truth polygon to RLE
+    ground_truth_rle = convert_polygon_to_compressed_RLE(coco_instance, ground_truth_polygon, height, width)
 
+    # The ground truth has IoU = 1 with itself.
+    ground_truth_IoU = 1.0
+
+    # get_changed_polygons_from_polygons
+    new_polygons = get_changed_polygons_from_polygons(polygon, change_amount)
+
+    # Convert the new_polygons to RLE format.
 
 
 def main():
