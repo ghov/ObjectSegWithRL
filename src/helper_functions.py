@@ -12,6 +12,21 @@ step_cost = -0.5
 coordinate_action_change_amount = 10
 ###
 
+# After the agent chooses an index action, we apply it to the state
+# each point of the vertex has two actions
+def apply_action_index_to_state(state_polygon, change_amount, action_index):
+
+    new_state_poly = state_polygon.copy()
+
+    # If the index is even, then we add to that index/2.
+    if((action_index % 2) == 0):
+        new_state_poly[action_index/2] += change_amount
+    else:
+        # if the index is odd, we subtract from index/2 -1 of that index.
+        new_state_poly[(action_index/2)-1] -= change_amount
+
+    return new_state_poly
+
 # Set the initial state to be the entire image, with the left corner being (x=0, y=0). The format is (x,y)
 # This really depends on the size that we need, so it should be more flexible
 def get_initial_state(height, width):
