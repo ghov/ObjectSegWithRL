@@ -87,7 +87,7 @@ def train(num_epochs):
             previous_state = None
 
             while((not stop_action) or (step_counter < max_steps)):
-
+                print("The current step is: " + str(step_counter))
 
                 if(step_counter == 0):
                     previous_state = initial_state
@@ -100,20 +100,28 @@ def train(num_epochs):
                 # torch.unsqueeze(images, 0)
                 # print(images.shape)
 
-                outputs = model.forward(images, previous_state)
+                # convert the previous state to a tensor
+                #print(previous_state)
+                previous_state_tensor = torch.Tensor.cuda(torch.from_numpy(np.asarray(previous_state))).float()
+
+                outputs = model.forward(images, previous_state_tensor)
 
                 # Get the predicted action
                 _, prediction = torch.max(outputs.data, 1)
 
+                #print(str(labels.numpy().tolist()[0]))
+
                 # Get the label, by taking all actions on previous state
                 reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,
-                labels.numpy().to_list(), height_initial, width_initial, coco, step_cost, stop_action_reward)
+                labels.numpy().tolist()[0], height_initial, width_initial, coco, step_cost, stop_action_reward)
 
-                reward_tensor = torch.Tensor.cuda(reward_np).float()
+                reward_tensor = torch.Tensor.cuda(torch.from_numpy(reward_np)).float()
+
+                #print("The shape of the reward tensor is: " + str(reward_tensor.size()))
 
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
-                loss = loss_fn(outputs, labels.view(height, 30))
+                loss = loss_fn(outputs, reward_tensor.view(1,17))
                 # Backpropagate the loss
                 loss.backward()
 
@@ -122,16 +130,21 @@ def train(num_epochs):
 
                 train_loss += loss.cpu().data[0] * images.size(0)
                 _, prediction = torch.max(outputs.data, 1)
-                print(prediction)
+                prediction = prediction.data.cpu().numpy()[0]
 
-                train_acc += torch.sum(outputs.data == labels.data)
+                if(prediction == 16):
+                    stop_action = True
+
+                print("The prediction is: " + str(prediction))
+
+                train_acc += torch.sum(outputs.data == reward_tensor.view(1,17).data)
 
                 # Append the reinforcement step counter
                 step_counter += 1
 
                 # Make the new state the previous state
                 previous_state = get_new_polygon_vector(previous_state, coordinate_action_change_amount, prediction)
-
+                print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc / 5960
@@ -144,12 +157,12 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
-    torch.save(model.state_dict(),
-               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/GregNet_' +
-               loss_fn.__str__() + "_" + str(train_loss))
+    #torch.save(model.state_dict(),
+    #           '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/ReGregNet_' +
+    #           loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(10)
+    train(100)
 
 if __name__ == "__main__":
     main()

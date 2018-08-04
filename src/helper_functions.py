@@ -13,10 +13,11 @@ coordinate_action_change_amount = 10
 ###
 
 # Set the initial state to be the entire image, with the left corner being (x=0, y=0). The format is (x,y)
+# This really depends on the size that we need, so it should be more flexible
 def get_initial_state(height, width):
 
     # Instantiate and populate the list
-    temp = list([0, 0, width, 0, width, height, 0, height])
+    temp = list([0, 0, width/2, 0, width, 0, width, height/2, width, height, width/2, height, 0, height, 0, height/2])
 
     return temp
 
@@ -24,8 +25,13 @@ def get_initial_state(height, width):
 # change the value of the x, y scalars at that index by the amount.
 def get_new_polygon_vector(old_vector_np, amount, index):
 
+    if(len(old_vector_np) == index):
+        return old_vector_np
+
     new_vector = old_vector_np.copy()
     new_vector[index] = new_vector[index] + amount
+
+    return new_vector
 
 # Given a polygon vector and a change amount, we need to change every value of each scalar in the vector by that amount
 # and return a list of these vectors.
