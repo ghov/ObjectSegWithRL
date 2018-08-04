@@ -5,7 +5,8 @@ from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
-from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon
+from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon,\
+    get_new_polygon_vector
 from ObjectSegWithRL.src.pytorch_dataset import GregDataset
 from ObjectSegWithRL.src.resize_functions import get_coco_instance
 
@@ -83,8 +84,10 @@ def train(num_epochs):
             # maximum number of steps allowed.
             stop_action = False
             step_counter = 0
+            previous_state = None
 
             while((not stop_action) or (step_counter < max_steps)):
+
 
                 if(step_counter == 0):
                     previous_state = initial_state
@@ -100,13 +103,13 @@ def train(num_epochs):
                 outputs = model.forward(images, previous_state)
 
                 # Get the predicted action
-
+                _, prediction = torch.max(outputs.data, 1)
 
                 # Get the label, by taking all actions on previous state
                 reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,
-                labels.numpy().to_list(), height_initial, width_initial, coco)
+                labels.numpy().to_list(), height_initial, width_initial, coco, step_cost, stop_action_reward)
 
-                reward_tensor = reward_np
+                reward_tensor = torch.Tensor.cuda(reward_np).float()
 
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
@@ -119,15 +122,15 @@ def train(num_epochs):
 
                 train_loss += loss.cpu().data[0] * images.size(0)
                 _, prediction = torch.max(outputs.data, 1)
-
+                print(prediction)
 
                 train_acc += torch.sum(outputs.data == labels.data)
 
-
-
+                # Append the reinforcement step counter
                 step_counter += 1
 
-
+                # Make the new state the previous state
+                previous_state = get_new_polygon_vector(previous_state, coordinate_action_change_amount, prediction)
 
 
         # Compute the average acc and loss over all 50000 training images

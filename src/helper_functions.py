@@ -15,16 +15,8 @@ coordinate_action_change_amount = 10
 # Set the initial state to be the entire image, with the left corner being (x=0, y=0). The format is (x,y)
 def get_initial_state(height, width):
 
-    # Instantiate the list
-    temp = list()
-    temp[0] = 0
-    temp[1] = 0
-    temp[2] = width
-    temp[3] = 0
-    temp[4] = width
-    temp[5] = height
-    temp[6] = 0
-    temp[7] = height
+    # Instantiate and populate the list
+    temp = list([0, 0, width, 0, width, height, 0, height])
 
     return temp
 
@@ -187,7 +179,7 @@ def main():
     iou_list = get_RLE_iou_list(rles, a_rle)
     print(get_reward_list_from_iou_list(100, 1.0, iou_list))
 
-    print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco))
+    print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco, 0.5, 0.001))
 
 if __name__ == "__main__":
     main()
