@@ -61,13 +61,9 @@ def convert_polygon_to_compressed_RLE(coco_instance, polygon_as_list, height, wi
         # Instantiate a new list to store the results
         new_rle_list = list()
 
-        # Get length of the polygon list:
-        p_len = len(polygon_as_list)
-
         for poly in polygon_as_list:
             new_rle_list.append(coco_instance.annToRLE_hw({'segmentation': check_segmentation_polygon(poly)}
                                                           , height, width))
-
         return new_rle_list
 
 
@@ -140,9 +136,10 @@ def main():
     b = get_changed_polygons_from_polygons(a, 1)
     print(np.asarray(b))
     coco = get_coco_instance()
+
     print(check_segmentation_polygon(a))
     print(convert_polygon_to_compressed_RLE(coco, a, 224, 224))
-
+    print(convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True))
 
 if __name__ == "__main__":
     main()

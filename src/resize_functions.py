@@ -142,9 +142,10 @@ def convert_to_three_channel(image_as_numpy):
 def get_coco_instance(annotation_file=None):
 
     # If no path is provided, just use the regular 2017 annotations
-    constant_ann_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/instances/instances_train2017.json'
+    #constant_ann_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/instances/instances_train2017.json'
     if(annotation_file == None):
-        return COCO(constant_ann_path)
+        return COCO()
+        #return COCO(constant_ann_path)
 
     # If a path is provided, then use that annotation file.
     return COCO(annotation_file)
