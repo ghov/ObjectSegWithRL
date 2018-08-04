@@ -11,13 +11,13 @@ from ObjectSegWithRL.src.pytorch_dataset import GregDataset
 from ObjectSegWithRL.src.resize_functions import get_coco_instance
 
 reward_multiplier = 100
-step_cost = -0.5
+step_cost = -0.005
 coordinate_action_change_amount = 10
 number_of_actions = 17
 polygon_state_length = 8
 height_initial = 224
 width_initial = 224
-max_steps = 100
+max_steps = 10000
 stop_action_reward = 0.00001
 #height, width = (224, 224)
 
@@ -41,8 +41,8 @@ test_transformations = transforms.Compose([
 
 optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 
-loss_fn = nn.MSELoss().cuda()
-#loss_fn = nn.L1Loss().cuda()
+#loss_fn = nn.MSELoss().cuda()
+loss_fn = nn.L1Loss().cuda()
 
 annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
 root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/'
@@ -121,6 +121,9 @@ def train(num_epochs):
 
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
+                print("The predicted reward is: " + str(outputs))
+                print("The actual reward is: " + str(reward_tensor.view(1,17)))
+
                 loss = loss_fn(outputs, reward_tensor.view(1,17))
                 # Backpropagate the loss
                 loss.backward()
@@ -152,9 +155,9 @@ def train(num_epochs):
         train_acc = train_acc / 5960
         train_loss = train_loss / 5960
 
-        print(epoch)
-        print(train_acc)
-        print(train_loss)
+        print("The current epoch is: " + str(epoch))
+        #print(train_acc)
+        #print(train_loss)
 
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
@@ -164,7 +167,7 @@ def train(num_epochs):
     #           loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(10)
+    train(200)
 
 if __name__ == "__main__":
     main()

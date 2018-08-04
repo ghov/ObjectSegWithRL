@@ -37,7 +37,7 @@ segmentations of the same size.
 2. Need to make a version of annToRLE from coco.py that takes as input the height and width.
 
 
-
+# NEED TO MAKE SURE THAT NONE OF THE CO-ORDINATES EVER GO BELOW 0. MAYBE PROVIDE BIG NEGATIVE REWARD FOR THIS.
 
 
 

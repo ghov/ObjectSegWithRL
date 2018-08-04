@@ -8,7 +8,7 @@ from ObjectSegWithRL.cocoapi.PythonAPI.pycocotools import mask
 ###
 # Constants
 reward_multiplier = 100
-step_cost = -0.5
+step_cost = -0.005
 coordinate_action_change_amount = 10
 ###
 
@@ -172,7 +172,7 @@ def get_reward_from_iou(reward_multiplier, previous_iou, new_iou):
 
 # Provide a polygon, an amount, and a ground truth polygon
 # Convert the ground truth polygon to RLE format
-# Compute the IoU of the ground truth polygon
+# Compute the IoU of the original polygon with the ground truth polygon
 # Generate a list of polygons by applying that amount to each scalar of the polygon
 # Convert these new polygons to RLE format
 # Compute the IoU of each of these polygons with the ground truth
@@ -184,11 +184,21 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     # Convert the ground truth polygon to RLE
     ground_truth_rle = convert_polygon_to_compressed_RLE(coco_instance, ground_truth_polygon, height, width)
 
-    # The ground truth has IoU = 1 with itself.
-    ground_truth_IoU = 1.0
+    # Convert the original polygon to compressed RLE
+    original_poly_rle = convert_polygon_to_compressed_RLE(coco_instance, polygon, height, width)
+
+    # Compute the IoU of the original polygon with the ground truth polygon
+    original_iou = get_RLE_iou(original_poly_rle, ground_truth_rle)
 
     # get_changed_polygons_from_polygons
     new_polygons = get_changed_polygons_from_polygon(polygon, change_amount)
+
+    # Get the index of the polygons that have negative values
+    negative_set = set()
+    for index, poly in enumerate(new_polygons):
+        for val in poly:
+            if(val < 0):
+                negative_set.add(index)
 
     # Convert the new_polygons to RLE format.
     rle_polygons = convert_polygon_to_compressed_RLE(coco_instance, new_polygons, height, width, multiple=True)
@@ -197,7 +207,11 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     iou_list = get_RLE_iou_list(rle_polygons, ground_truth_rle)
 
     # Compute the rewards for the new rles
-    reward_list = get_reward_list_from_iou_list(100, 1.0, iou_list)
+    reward_list = get_reward_list_from_iou_list(100, original_iou, iou_list)
+
+    # Adjust for the negative_indexes
+    for val in negative_set:
+        reward_list[val] = -100
 
     # Adjust for the step cost if needed
     if(step_cost != None):

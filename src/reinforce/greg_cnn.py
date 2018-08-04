@@ -49,7 +49,7 @@ class GregNet(nn.Module):
             #nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(128, number_of_actions),
-            # nn.ReLU(inplace=True),
+            #nn.ReLU(inplace=True),
         )
 
     def forward(self, x, previous_state):
