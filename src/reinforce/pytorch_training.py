@@ -130,7 +130,7 @@ def train(num_epochs):
 
                 train_loss += loss.cpu().data[0] * images.size(0)
                 _, prediction = torch.max(outputs.data, 1)
-                prediction = prediction.data.cpu().numpy()[0]
+                prediction = int(prediction.data.cpu().numpy()[0])
 
                 if(prediction == 16):
                     stop_action = True

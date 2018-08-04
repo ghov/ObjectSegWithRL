@@ -23,10 +23,10 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index):
 
     # If the index is even, then we add to that index/2.
     if((action_index % 2) == 0):
-        new_state_poly[action_index/2] += change_amount
+        new_state_poly[int(action_index/2)] += change_amount
     else:
         # if the index is odd, we subtract from index/2 -1 of that index.
-        new_state_poly[(action_index/2)-1] -= change_amount
+        new_state_poly[int((action_index-1)/2)] -= change_amount
 
     return new_state_poly
 
@@ -227,6 +227,8 @@ def main():
     print(get_reward_list_from_iou_list(100, 1.0, iou_list))
 
     print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco, 0.5, 0.001))
+
+    print(apply_action_index_to_state(a, 10, 11))
 
 if __name__ == "__main__":
     main()
