@@ -86,7 +86,7 @@ def train(num_epochs):
             step_counter = 0
             previous_state = None
 
-            while((not stop_action) or (step_counter < max_steps)):
+            while((not stop_action) and (step_counter < max_steps)):
                 print("The current step is: " + str(step_counter))
 
                 if(step_counter == 0):
@@ -135,6 +135,8 @@ def train(num_epochs):
                 if(prediction == 16):
                     stop_action = True
 
+                #print("is prediction 16? " + str(prediction == 16))
+
                 print("The prediction is: " + str(prediction))
 
                 train_acc += torch.sum(outputs.data == reward_tensor.view(1,17).data)
@@ -162,7 +164,7 @@ def train(num_epochs):
     #           loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(100)
+    train(10)
 
 if __name__ == "__main__":
     main()
