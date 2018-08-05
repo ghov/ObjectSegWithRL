@@ -16,7 +16,7 @@ coordinate_action_change_amount = 10
 # each point of the vertex has two actions
 ### We need to check to see if this action will place a negative value in the index.
 ### If so, then we don't apply that action to the index.
-def apply_action_index_to_state(state_polygon, change_amount, action_index):
+def apply_action_index_to_state(state_polygon, change_amount, action_index, height, width):
 
     if(len(state_polygon) == action_index/2):
         return state_polygon
@@ -25,7 +25,11 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index):
 
     # If the index is even, then we add to that index/2.
     if((action_index % 2) == 0):
-        new_state_poly[int(action_index/2)] += change_amount
+        # Check if the action would create a value that is larger than the maximum allowed(height or width)
+        if((state_polygon[int((action_index)/2)] + change_amount) > height):
+            return state_polygon
+        else:
+            new_state_poly[int(action_index/2)] += change_amount
     else:
         # Check if the action would create a negative value in that index.
         if ((state_polygon[int((action_index-1)/2)] - change_amount) < 0):
@@ -248,7 +252,7 @@ def main():
 
     print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco, 0.5, 0.001))
 
-    print(apply_action_index_to_state(a, 10, 11))
+    print(apply_action_index_to_state(a, 10, 11, 224, 224))
 
 if __name__ == "__main__":
     main()

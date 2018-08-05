@@ -149,7 +149,8 @@ def train(num_epochs):
                 step_counter += 1
 
                 # Make the new state the previous state
-                previous_state = apply_action_index_to_state(previous_state, coordinate_action_change_amount, prediction)
+                previous_state = apply_action_index_to_state(previous_state, coordinate_action_change_amount,
+                                                             prediction, height_initial, width_initial)
                 print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
