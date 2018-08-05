@@ -65,39 +65,43 @@ def get_new_polygon_vector(old_vector_list, amount, index):
 # Given a polygon vector and a change amount, we need to change every value of each scalar in the vector by that amount
 # and return a list of these vectors.
 # So we should have len(list of poly) * 2 results
-def get_changed_polygons_from_polygon(previous_polygon, change_amount):
+def get_changed_polygons_from_polygon(previous_polygon, change_amount, height, width):
 
     # instantiate the new list of polygons
     new_polygon_list = list()
 
     # Go through each element of the polygon list and change it by the amount.
     # Each change should result in a new polygon.
-    new_len = len(previous_polygon)
+    new_len = len(previous_polygon) * 2
 
-    for i in range(0, new_len):
-        # Make a copy of the original
-        temp_p = previous_polygon.copy()
+    for action_index in range(0, new_len):
+        new_polygon_list.append(apply_action_index_to_state(previous_polygon, change_amount, action_index, height, width))
 
-        # Add the amount to the even index
-        temp_p[i] += change_amount
 
-        # Add this polygon to the list of polygons
-        new_polygon_list.append(temp_p)
-
-        # Make a copy of the original
-        temp_p = previous_polygon.copy()
-
-        # Subtract the amount from the add index
-        temp_p[i] -= change_amount
-
-        # Add this polygon to the list of polygons
-        new_polygon_list.append(temp_p)
-
-    # for index, val in enumerate(previous_polygon):
-    #     # Make a copy of the previous_polygon.
+    # for i in range(0, new_len):
+    #     # Make a copy of the original
     #     temp_p = previous_polygon.copy()
-    #     temp_p[index] = previous_polygon[index] + change_amount
+    #
+    #     # Add the amount to the even index
+    #     temp_p[i] += change_amount
+    #
+    #     # Add this polygon to the list of polygons
     #     new_polygon_list.append(temp_p)
+    #
+    #     # Make a copy of the original
+    #     temp_p = previous_polygon.copy()
+    #
+    #     # Subtract the amount from the add index
+    #     temp_p[i] -= change_amount
+    #
+    #     # Add this polygon to the list of polygons
+    #     new_polygon_list.append(temp_p)
+    #
+    # # for index, val in enumerate(previous_polygon):
+    # #     # Make a copy of the previous_polygon.
+    # #     temp_p = previous_polygon.copy()
+    # #     temp_p[index] = previous_polygon[index] + change_amount
+    # #     new_polygon_list.append(temp_p)
 
     return new_polygon_list
 
@@ -201,7 +205,7 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     original_iou = get_RLE_iou(original_poly_rle, ground_truth_rle)
 
     # get_changed_polygons_from_polygons
-    new_polygons = get_changed_polygons_from_polygon(polygon, change_amount)
+    new_polygons = get_changed_polygons_from_polygon(polygon, change_amount, height, width)
 
     # Get the index of the polygons that have negative values
     negative_set = set()
@@ -235,24 +239,29 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     return np.array(reward_list)
 
 def main():
-    a = [0, 0, 0, 0, 0, 0]
-    b = get_changed_polygons_from_polygon(a, 1)
+    ground_truth = [224,105.453,183.979,83.428,176.144, 49.163,136.382,0.193,80.942,0.193,26.063,61.402,5.902, 96.891,
+                    0.302,111.581,27.177,191.138,47.339,224,64.144,198.491,72.54,121.368,73.661,104.244,155.422,116.483,
+                    215.9,115.257]
+    a = [15, 60, 94, 0, 209, 69, 15, 199]
+    b = get_changed_polygons_from_polygon(a, 5, 224, 224)
     print(np.asarray(b))
     coco = get_coco_instance()
 
-    print(check_segmentation_polygon(a))
-    print(convert_polygon_to_compressed_RLE(coco, a, 224, 224))
+    #print(check_segmentation_polygon(a))
+    #print(convert_polygon_to_compressed_RLE(coco, a, 224, 224))
     a_rle = convert_polygon_to_compressed_RLE(coco, a, 224, 224)
-    print(convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True))
+    ground_truth_rle = convert_polygon_to_compressed_RLE(coco, ground_truth, 224, 224)
+    #print(convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True))
     rles = convert_polygon_to_compressed_RLE(coco, b, 224, 224, multiple=True)
-    print(get_RLE_iou(a_rle, a_rle))
-    print(get_RLE_iou_list(rles, a_rle))
-    iou_list = get_RLE_iou_list(rles, a_rle)
-    print(get_reward_list_from_iou_list(100, 1.0, iou_list))
+    print(get_RLE_iou(a_rle, ground_truth_rle))
+    state_iou = get_RLE_iou(a_rle, ground_truth_rle)
+    print(get_RLE_iou_list(rles, ground_truth_rle))
+    iou_list = get_RLE_iou_list(rles, ground_truth_rle)
+    print(get_reward_list_from_iou_list(100, state_iou, iou_list))
 
-    print(get_np_reward_vector_from_polygon(a, 1, a, 224, 224, coco, 0.5, 0.001))
+    print(get_np_reward_vector_from_polygon(a, 1, ground_truth, 224, 224, coco, step_cost, 0.001))
 
-    print(apply_action_index_to_state(a, 10, 11, 224, 224))
+    print(apply_action_index_to_state(a, 5, 7, 224, 224))
 
 if __name__ == "__main__":
     main()

@@ -123,9 +123,9 @@ def train(num_epochs):
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
                 print("The predicted reward is: " + str(outputs))
-                print("The actual reward is: " + str(reward_tensor.view(1,17)))
+                print("The actual reward is: " + str(reward_tensor.view(1, 17)))
 
-                loss = loss_fn(outputs, reward_tensor.view(1,17))
+                loss = loss_fn(outputs, reward_tensor.view(1, 17))
                 # Backpropagate the loss
                 loss.backward()
 

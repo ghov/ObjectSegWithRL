@@ -39,5 +39,8 @@ segmentations of the same size.
 
 # NEED TO MAKE SURE THAT NONE OF THE CO-ORDINATES EVER GO BELOW 0. MAYBE PROVIDE BIG NEGATIVE REWARD FOR THIS.
 # NEED TO MAKE SURE THE COORDINATES NEVER GO ABOVE THE HEIGHT OR WIDTH
+# For some reason, choosing to decrease a 0 has a high reward. Investigate!!!!
+    # THERE IS A LARGE POSITIVE REWARD FOR CHOOSING TO STAY WITH THE CURRENT POLYGON !!!
+    # The problem is get_changed_polygons_from_polygon. It doesn't have the max or min limit.
 
 
