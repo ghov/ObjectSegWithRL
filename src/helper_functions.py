@@ -14,6 +14,8 @@ coordinate_action_change_amount = 10
 
 # After the agent chooses an index action, we apply it to the state
 # each point of the vertex has two actions
+### We need to check to see if this action will place a negative value in the index.
+### If so, then we don't apply that action to the index.
 def apply_action_index_to_state(state_polygon, change_amount, action_index):
 
     if(len(state_polygon) == action_index/2):
@@ -25,8 +27,12 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index):
     if((action_index % 2) == 0):
         new_state_poly[int(action_index/2)] += change_amount
     else:
+        # Check if the action would create a negative value in that index.
+        if ((state_polygon[int((action_index-1)/2)] - change_amount) < 0):
+            return state_polygon
+        else:
         # if the index is odd, we subtract from index/2 -1 of that index.
-        new_state_poly[int((action_index-1)/2)] -= change_amount
+            new_state_poly[int((action_index-1)/2)] -= change_amount
 
     return new_state_poly
 

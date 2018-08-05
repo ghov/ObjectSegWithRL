@@ -12,13 +12,14 @@ from ObjectSegWithRL.src.resize_functions import get_coco_instance
 
 reward_multiplier = 100
 step_cost = -0.005
-coordinate_action_change_amount = 10
+coordinate_action_change_amount = 5
 number_of_actions = 17
 polygon_state_length = 8
 height_initial = 224
 width_initial = 224
 max_steps = 10000
-stop_action_reward = 0.00001
+stop_action_reward = 0
+#stop_action_reward = 0.00001
 #height, width = (224, 224)
 
 
