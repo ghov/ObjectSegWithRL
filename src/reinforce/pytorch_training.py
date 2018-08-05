@@ -169,7 +169,7 @@ def train(num_epochs):
     #           loss_fn.__str__() + "_" + str(train_loss))
 
 def main():
-    train(200)
+    train(10)
 
 if __name__ == "__main__":
     main()

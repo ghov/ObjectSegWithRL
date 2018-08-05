@@ -26,7 +26,7 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index, heig
     # If the index is even, then we add to that index/2.
     if((action_index % 2) == 0):
         # Check if the action would create a value that is larger than the maximum allowed(height or width)
-        if((state_polygon[int((action_index)/2)] + change_amount) > height):
+        if((state_polygon[int(action_index/2)] + change_amount) > height):
             return state_polygon
         else:
             new_state_poly[int(action_index/2)] += change_amount
