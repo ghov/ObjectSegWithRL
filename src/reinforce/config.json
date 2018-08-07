@@ -11,9 +11,11 @@
   "lr" : 0.001,
   "weight_decay" : 0.0001,
   "batch_size" : 1,
-  "num_workers" : 4
+  "num_workers" : 4,
   "file_paths" : {
-    "image_directory" : "",
-    "polygon_directory" : ""
+    "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/",
+    "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json",
+    "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/reinforcement_learning/",
+    "model_name" : "rein_L1Loss()_0.04346"
   }
 }
