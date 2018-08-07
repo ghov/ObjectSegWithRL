@@ -36,11 +36,14 @@ Or every reward is smaller than the stop action.
 segmentations of the same size.
 2. Need to make a version of annToRLE from coco.py that takes as input the height and width.
 
+NEXT TO DO:
+RUN FOR MORE THAN ONE IMAGE.
 
-# NEED TO MAKE SURE THAT NONE OF THE CO-ORDINATES EVER GO BELOW 0. MAYBE PROVIDE BIG NEGATIVE REWARD FOR THIS.
-# NEED TO MAKE SURE THE COORDINATES NEVER GO ABOVE THE HEIGHT OR WIDTH
-# For some reason, choosing to decrease a 0 has a high reward. Investigate!!!!
-    # THERE IS A LARGE POSITIVE REWARD FOR CHOOSING TO STAY WITH THE CURRENT POLYGON !!!
-    # The problem is get_changed_polygons_from_polygon. It doesn't have the max or min limit.
+
+# DONE - # NEED TO MAKE SURE THAT NONE OF THE CO-ORDINATES EVER GO BELOW 0. MAYBE PROVIDE BIG NEGATIVE REWARD FOR THIS.
+# DONE - # NEED TO MAKE SURE THE COORDINATES NEVER GO ABOVE THE HEIGHT OR WIDTH
+# DONE - # For some reason, choosing to decrease a 0 has a high reward. Investigate!!!!
+# DONE -     # THERE IS A LARGE POSITIVE REWARD FOR CHOOSING TO STAY WITH THE CURRENT POLYGON !!!
+# DONE -     # The problem is get_changed_polygons_from_polygon. It doesn't have the max or min limit.
 
 

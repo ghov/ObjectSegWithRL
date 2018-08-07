@@ -45,8 +45,8 @@ optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 #loss_fn = nn.MSELoss().cuda()
 loss_fn = nn.L1Loss().cuda()
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
-root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
+root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/'
 
 #annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
 #root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
@@ -164,12 +164,12 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
-    #torch.save(model.state_dict(),
-    #           '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/ReGregNet_' +
-    #           loss_fn.__str__() + "_" + str(train_loss))
+    torch.save(model.state_dict(),
+               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
+               'reinforcement_learning/rein_' + loss_fn.__str__() + "_" + str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
-    train(10)
+    train(1000)
 
 if __name__ == "__main__":
     main()
