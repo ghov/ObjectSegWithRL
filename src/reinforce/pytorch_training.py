@@ -154,8 +154,8 @@ def train(num_epochs):
                 print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
-        train_acc = train_acc / 5960
-        train_loss = train_loss / 5960
+        train_acc = train_acc / 2
+        train_loss = train_loss / 2
 
         print("The current epoch is: " + str(epoch))
         #print(train_acc)
@@ -164,12 +164,12 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
-    torch.save(model.state_dict(),
-               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
-               'reinforcement_learning/rein_' + loss_fn.__str__() + "_" + str(round(train_loss.data.numpy().item(), 5)))
+    #torch.save(model.state_dict(),
+    #           '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
+    #           'reinforcement_learning/rein_' + loss_fn.__str__() + "_" + str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
-    train(1000)
+    train(10)
 
 if __name__ == "__main__":
     main()
