@@ -5,27 +5,24 @@ from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
-from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon,\
-    get_new_polygon_vector, apply_action_index_to_state
+from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon, apply_action_index_to_state
 from ObjectSegWithRL.src.pytorch_dataset import GregDataset
 from ObjectSegWithRL.src.resize_functions import get_coco_instance
-
-reward_multiplier = 100
-step_cost = -0.005
-coordinate_action_change_amount = 5
-number_of_actions = 17
-polygon_state_length = 8
-height_initial = 224
-width_initial = 224
-max_steps = 10000
-stop_action_reward = 0
-#stop_action_reward = 0.00001
-#height, width = (224, 224)
+import json
 
 
+# The file path for the configuration file
+config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/reinforce/config.json"
+
+# Read the config file
+with open(config_file_path, 'r') as read_file:
+    config_json = json.load(read_file)
+
+
+# Check if gpu is available
 cuda_avail = torch.cuda.is_available()
 
-model = GregNet(number_of_actions, polygon_state_length)
+model = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
 
 if cuda_avail:
     model.cuda()
@@ -34,19 +31,14 @@ if cuda_avail:
 test_transformations = transforms.Compose([
     transforms.ToTensor()
 ])
-# test_transformations = transforms.Compose([
-#     transforms.ToTensor(),
-#     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#
-# ])
 
-optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
+optimizer = Adam(model.parameters(), lr=config_json['learning_rate'], weight_decay=config_json['weight_decay'])
 
 #loss_fn = nn.MSELoss().cuda()
 loss_fn = nn.L1Loss().cuda()
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
-root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
+root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/'
 
 #annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/30_vertex_poly_adjusted.json'
 #root_dir_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/30/'
@@ -68,7 +60,7 @@ def train(num_epochs):
         #print("yes")
 
     # Get the initial state of the polygon
-    initial_state = get_initial_state(height_initial, width_initial)
+    initial_state = get_initial_state(config_json['height_initial'], config_json['width_initial'])
 
     for epoch in range(num_epochs):
         model.train()
@@ -87,7 +79,7 @@ def train(num_epochs):
             step_counter = 0
             previous_state = None
 
-            while((not stop_action) and (step_counter < max_steps)):
+            while((not stop_action) and (step_counter < config_json['max_steps'])):
                 print("The current step is: " + str(step_counter))
 
                 if(step_counter == 0):
@@ -113,8 +105,11 @@ def train(num_epochs):
                 #print(str(labels.numpy().tolist()[0]))
 
                 # Get the label, by taking all actions on previous state
-                reward_np = get_np_reward_vector_from_polygon(previous_state, coordinate_action_change_amount,
-                labels.numpy().tolist()[0], height_initial, width_initial, coco, step_cost, stop_action_reward)
+                reward_np = get_np_reward_vector_from_polygon(previous_state,
+                                                              config_json['coordinate_action_change_amount'],
+                labels.numpy().tolist()[0], config_json['height_initial'], config_json['width_initial'], coco,
+                                                              config_json['step_cost'],
+                                                              config_json['stop_action_reward'])
 
                 reward_tensor = torch.Tensor.cuda(torch.from_numpy(reward_np)).float()
 
@@ -148,8 +143,10 @@ def train(num_epochs):
                 step_counter += 1
 
                 # Make the new state the previous state
-                previous_state = apply_action_index_to_state(previous_state, coordinate_action_change_amount,
-                                                             prediction, height_initial, width_initial)
+                previous_state = apply_action_index_to_state(previous_state,
+                                                             config_json['coordinate_action_change_amount'],
+                                                             prediction, config_json['height_initial'],
+                                                             config_json['width_initial'])
                 print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
@@ -163,12 +160,13 @@ def train(num_epochs):
         # Print the metrics
         print("Epoch {}, Train Accuracy: {} , TrainLoss: {}".format(epoch, train_acc, train_loss))
 
-    #torch.save(model.state_dict(),
-    #           '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
-    #           'reinforcement_learning/rein_' + loss_fn.__str__() + "_" + str(round(train_loss.data.numpy().item(), 5)))
+    torch.save(model.state_dict(),
+               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
+               'reinforcement_learning/rein_no_drop' + loss_fn.__str__() + "_" +
+               str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
-    train(10)
+    train(100)
 
 if __name__ == "__main__":
     main()

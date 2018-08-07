@@ -1,7 +1,10 @@
 # Functions to help with the rnn/reinforcement learning
 
 import numpy as np
-from ObjectSegWithRL.src.resize_functions import get_coco_instance, get_height_width, check_segmentation_polygon
+import skimage.io as io
+#from ObjectSegWithRL.src.reinforce.pytorch_tester import reinforce_poly_test
+from ObjectSegWithRL.src.resize_functions import get_coco_instance, check_segmentation_polygon, show_image_with_mask,\
+    convert_to_three_channel
 # Need to import mask from coco
 from ObjectSegWithRL.cocoapi.PythonAPI.pycocotools import mask
 
@@ -11,6 +14,29 @@ reward_multiplier = 100
 step_cost = -0.005
 coordinate_action_change_amount = 10
 ###
+
+
+# function to take an image, produce a predicted polygon with a given model and display the segmentation on that image.
+#  Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
+def show_reinforce_predicted_segmentation_polygon(image_id, image_directory_path, model_state_path, model_instance,
+                                                  config_file_path, coco_instance):
+
+    final_polygon = reinforce_poly_test(image_id, config_file_path)[0]
+
+    temp_list = list()
+    temp_list.append({'segmentation' : [final_polygon]})
+
+    print(final_polygon)
+
+    # Load the image
+    # Form the full image path
+    image_path = image_directory_path + str(image_id) + '.jpg'
+
+    # Read the image as a numpy array
+    # Check if the image has three channels. If not, resize it for three channels.
+    temp_image = convert_to_three_channel(io.imread(image_path))
+
+    show_image_with_mask(coco_instance, temp_image, temp_list)
 
 # After the agent chooses an index action, we apply it to the state
 # each point of the vertex has two actions

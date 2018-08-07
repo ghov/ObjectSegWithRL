@@ -25,6 +25,9 @@ def reinforce_poly_test(image_id, config_file_path):
     # Instantiate the model instance
     model_instance = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
 
+    # Set the mode to evaluate, so dropout is turned off
+    #model_instance.eval()
+
     # make the model use the gpu
     model_instance.cuda()
 
