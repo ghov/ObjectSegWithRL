@@ -2,6 +2,7 @@ from torch.optim import Adam
 import torch.nn as nn
 import torch
 from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
+from ObjectSegWithRL.src.reinforce.models.greg_vgg import Greg_VGG
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
