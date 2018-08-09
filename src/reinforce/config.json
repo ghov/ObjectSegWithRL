@@ -1,21 +1,22 @@
 {
   "reward_multiplier" : 100,
-  "step_cost" : -0.005,
+  "step_cost" : -0.05,
   "coordinate_action_change_amount" : 5,
   "number_of_actions" : 17,
   "polygon_state_length" : 8,
   "height_initial" : 224,
   "width_initial" : 224,
-  "max_steps" : 1000,
+  "max_steps" : 50,
+  "epochs" : 20,
   "stop_action_reward" : 0,
   "learning_rate" : 0.001,
   "weight_decay" : 0.0001,
   "batch_size" : 1,
   "num_workers" : 4,
   "file_paths" : {
-    "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/",
-    "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json",
+    "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/",
+    "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json",
     "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/reinforcement_learning/",
-    "model_name" : "rein_no_dropL1Loss()_20.53006"
+    "model_name" : "rein_no_dropL1Loss()_0.13461"
   }
 }

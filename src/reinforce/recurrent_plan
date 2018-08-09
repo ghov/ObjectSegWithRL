@@ -35,6 +35,8 @@ Or every reward is smaller than the stop action.
 1. It looks like coco can compute iou from segmentation poly, without needing to convert to mask. But may need
 segmentations of the same size.
 2. Need to make a version of annToRLE from coco.py that takes as input the height and width.
+3. Might be better to use softmax at the final stage, instead of just the regular rewards.
+
 
 NEXT TO DO:
 RUN FOR MORE THAN ONE IMAGE.

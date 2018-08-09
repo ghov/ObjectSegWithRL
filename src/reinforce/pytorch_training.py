@@ -150,8 +150,8 @@ def train(num_epochs):
                 print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
-        train_acc = train_acc / 2
-        train_loss = train_loss / 2
+        train_acc = train_acc / step_counter
+        train_loss = train_loss / step_counter
 
         print("The current epoch is: " + str(epoch))
         #print(train_acc)
@@ -166,7 +166,7 @@ def train(num_epochs):
                str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
-    train(100)
+    train(config_json['epochs'])
 
 if __name__ == "__main__":
     main()

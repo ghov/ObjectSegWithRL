@@ -61,6 +61,8 @@ def reinforce_poly_test(image_id, config_file_path):
         # Run a forward step of the model
         outputs = model_instance.forward(image_cuda.view(1,3,224,224), previous_state_tensor)
 
+        print(outputs)
+
         # Get the predicted action
         _, prediction = torch.max(outputs.data, 1)
         prediction = int(prediction.data.cpu().numpy()[0])
@@ -85,7 +87,7 @@ def main():
     config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/reinforce/config.json"
 
     # Set the image id. Probably should be a parameter for the function
-    image_id = '8786'
+    image_id = '3337'
 
     print(reinforce_poly_test(image_id, config_file_path))
 
