@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 import torch
+from torch import cat
 
 class Greg_VGG(nn.Module):
 
@@ -19,9 +20,10 @@ class Greg_VGG(nn.Module):
         if init_weights:
             self._initialize_weights()
 
-    def forward(self, x):
+    def forward(self, x, previous_state):
         x = self.features(x)
         x = x.view(x.size(0), -1)
+        x = self.classifier(cat((x, previous_state.view(1, 8)), 1))
         x = self.classifier(x)
         return x
 
