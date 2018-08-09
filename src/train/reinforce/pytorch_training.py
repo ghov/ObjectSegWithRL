@@ -1,16 +1,18 @@
-from torch.optim import Adam
-import torch.nn as nn
-import torch
-from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
-from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19, vgg19_bn
-from torchvision import transforms
-from torch.utils.data import DataLoader
-import numpy as np
-from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon, apply_action_index_to_state
-from ObjectSegWithRL.src.pytorch_dataset import GregDataset
-from ObjectSegWithRL.src.resize_functions import get_coco_instance
 import json
 
+import numpy as np
+import torch
+import torch.nn as nn
+from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon, \
+    apply_action_index_to_state
+from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19
+from torch.optim import Adam
+from torch.utils.data import DataLoader
+from torchvision import transforms
+
+from ObjectSegWithRL.src.models.reinforce.greg_cnn import GregNet
+from ObjectSegWithRL.src.pytorch_custom_dataset.pytorch_dataset import GregDataset
+from ObjectSegWithRL.src.utils.resize_functions import get_coco_instance
 
 # The file path for the configuration file
 config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/reinforce/config.json"

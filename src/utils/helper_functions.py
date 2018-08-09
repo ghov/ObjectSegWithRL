@@ -2,11 +2,13 @@
 
 import numpy as np
 import skimage.io as io
-#from ObjectSegWithRL.src.reinforce.pytorch_tester import reinforce_poly_test
-from ObjectSegWithRL.src.resize_functions import get_coco_instance, check_segmentation_polygon, show_image_with_mask,\
-    convert_to_three_channel
+from pycocotools.coco import COCO
+
 # Need to import mask from coco
 from ObjectSegWithRL.cocoapi.PythonAPI.pycocotools import mask
+# from ObjectSegWithRL.src.reinforce.pytorch_tester import reinforce_poly_test
+from ObjectSegWithRL.src.utils.resize_functions import get_coco_instance, show_image_with_mask, \
+    convert_to_three_channel
 
 ###
 # Constants
@@ -15,6 +17,27 @@ step_cost = -0.005
 coordinate_action_change_amount = 10
 ###
 
+# Need a coco instance for lots of stuff, including showing annotation on image.
+def get_coco_instance(annotation_file=None):
+
+    # If no path is provided, just use the regular 2017 annotations
+    #constant_ann_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/instances/instances_train2017.json'
+    if(annotation_file == None):
+        return COCO()
+        #return COCO(constant_ann_path)
+
+    # If a path is provided, then use that annotation file.
+    return COCO(annotation_file)
+
+# The annotations in mscoco are stored as a dictionary, under the key 'segmentation'. The value is a [[]].
+# So we need to make sure that polygon used with 'segmentation' is in this format
+def check_segmentation_polygon(polygon):
+
+    # If the polygon is just a list, then put it in a list.
+    if(type(polygon[0]) != list):
+        return [polygon]
+    else:
+        return polygon
 
 # function to take an image, produce a predicted polygon with a given model and display the segmentation on that image.
 #  Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
@@ -102,32 +125,6 @@ def get_changed_polygons_from_polygon(previous_polygon, change_amount, height, w
 
     for action_index in range(0, new_len):
         new_polygon_list.append(apply_action_index_to_state(previous_polygon, change_amount, action_index, height, width))
-
-
-    # for i in range(0, new_len):
-    #     # Make a copy of the original
-    #     temp_p = previous_polygon.copy()
-    #
-    #     # Add the amount to the even index
-    #     temp_p[i] += change_amount
-    #
-    #     # Add this polygon to the list of polygons
-    #     new_polygon_list.append(temp_p)
-    #
-    #     # Make a copy of the original
-    #     temp_p = previous_polygon.copy()
-    #
-    #     # Subtract the amount from the add index
-    #     temp_p[i] -= change_amount
-    #
-    #     # Add this polygon to the list of polygons
-    #     new_polygon_list.append(temp_p)
-    #
-    # # for index, val in enumerate(previous_polygon):
-    # #     # Make a copy of the previous_polygon.
-    # #     temp_p = previous_polygon.copy()
-    # #     temp_p[index] = previous_polygon[index] + change_amount
-    # #     new_polygon_list.append(temp_p)
 
     return new_polygon_list
 

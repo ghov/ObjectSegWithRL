@@ -4,14 +4,17 @@
 
 # This function should only be called for one image.
 
-from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
-from ObjectSegWithRL.src.resize_functions import convert_to_three_channel
-from ObjectSegWithRL.src.helper_functions import get_initial_state, apply_action_index_to_state
-from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19, vgg19_bn
-import skimage.io as io
-import numpy as np
-import torch
 import json
+
+import numpy as np
+import skimage.io as io
+import torch
+from ObjectSegWithRL.src.helper_functions import get_initial_state, apply_action_index_to_state
+from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19
+
+from ObjectSegWithRL.src.models.reinforce.greg_cnn import GregNet
+from ObjectSegWithRL.src.utils.resize_functions import convert_to_three_channel
+
 
 def reinforce_poly_test(image_id, config_file_path):
 

@@ -8,7 +8,7 @@
   "width_initial" : 224,
   "max_steps" : 150,
   "epochs" : 50,
-  "model" : "gregnet",
+  "model" : "vggnet",
   "stop_action_reward" : 0,
   "learning_rate" : 0.001,
   "weight_decay" : 0.0001,

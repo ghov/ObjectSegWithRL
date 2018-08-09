@@ -1,12 +1,13 @@
-from torch.optim import Adam
-import torch.nn as nn
-import torch
-#from ObjectSegWithRL.src.greg_cnn import GregNet
-from ObjectSegWithRL.src.greg_cnn_cSigmoid import GregNet
-from ObjectSegWithRL.src.pytorch_stuff import GregDataset
-from torchvision import transforms
-from torch.utils.data import DataLoader
 import numpy as np
+import torch
+import torch.nn as nn
+from ObjectSegWithRL.src.pytorch_stuff import GregDataset
+from torch.optim import Adam
+from torch.utils.data import DataLoader
+from torchvision import transforms
+
+# from ObjectSegWithRL.src.greg_cnn import GregNet
+from ObjectSegWithRL.src.models.greg_cnn_cSigmoid import GregNet
 
 cuda_avail = torch.cuda.is_available()
 

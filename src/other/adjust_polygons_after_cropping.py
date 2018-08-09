@@ -2,9 +2,11 @@
 
 
 
-from pycocotools.coco import COCO
 import json
-from .resize_functions import adjust_poly_crop
+
+from pycocotools.coco import COCO
+
+from ObjectSegWithRL.src.utils.resize_functions import adjust_poly_crop
 
 read_directory = '/media/greghovhannisyan/BackupData1/mscoco/images/train2017_crop_bbox/'
 write_file_path = '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/train_2017_bbox_crop_polygons_adjusted.json'
