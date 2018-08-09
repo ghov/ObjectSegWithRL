@@ -40,7 +40,7 @@ class Greg_VGG(nn.Module):
         x = self.features(x)
         #x = x.view(x.size(0), -1)
         x = x.view(x.size(0), 512 * 7 * 7)
-        print(x.shape)
+        #print(x.shape)
         x = self.classifier(cat((x, previous_state.view(1, 8)), 1))
         return x
 

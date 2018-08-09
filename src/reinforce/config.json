@@ -1,7 +1,7 @@
 {
   "reward_multiplier" : 100,
   "step_cost" : -0.0005,
-  "coordinate_action_change_amount" : 1,
+  "coordinate_action_change_amount" : 5,
   "number_of_actions" : 17,
   "polygon_state_length" : 8,
   "height_initial" : 224,

@@ -86,7 +86,7 @@ def train(num_epochs):
             previous_state = None
 
             while((not stop_action) and (step_counter < config_json['max_steps'])):
-                print("The current step is: " + str(step_counter))
+                #print("The current step is: " + str(step_counter))
 
                 if(step_counter == 0):
                     previous_state = initial_state
@@ -123,8 +123,8 @@ def train(num_epochs):
 
                 # outputs = model.forward(torch.unsqueeze(images, 0))
                 height, _, width = labels.shape
-                print("The predicted reward is: " + str(outputs))
-                print("The actual reward is: " + str(reward_tensor.view(1, 17)))
+                #print("The predicted reward is: " + str(outputs))
+                #print("The actual reward is: " + str(reward_tensor.view(1, 17)))
 
                 loss = loss_fn(outputs, reward_tensor.view(1, 17))
                 # Backpropagate the loss
@@ -141,7 +141,7 @@ def train(num_epochs):
 
                 #print("is prediction 16? " + str(prediction == 16))
 
-                print("The prediction is: " + str(prediction))
+                #print("The prediction is: " + str(prediction))
 
                 train_acc += torch.sum(outputs.data == reward_tensor.view(1,17).data)
 
@@ -153,7 +153,7 @@ def train(num_epochs):
                                                              config_json['coordinate_action_change_amount'],
                                                              prediction, config_json['height_initial'],
                                                              config_json['width_initial'])
-                print("The new state is: " + str(previous_state))
+                #print("The new state is: " + str(previous_state))
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc / step_counter
@@ -168,7 +168,7 @@ def train(num_epochs):
 
     torch.save(model.state_dict(),
                '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
-               'reinforcement_learning/rein_no_drop' + loss_fn.__str__() + "_" +
+               'reinforcement_learning/rein_' + config_json["model"] + '_' + loss_fn.__str__() + "_" +
                str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
