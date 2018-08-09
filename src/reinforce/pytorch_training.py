@@ -2,7 +2,7 @@ from torch.optim import Adam
 import torch.nn as nn
 import torch
 from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
-from ObjectSegWithRL.src.reinforce.models.greg_vgg import Greg_VGG
+from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19, vgg19_bn
 from torchvision import transforms
 from torch.utils.data import DataLoader
 import numpy as np
@@ -23,7 +23,12 @@ with open(config_file_path, 'r') as read_file:
 # Check if gpu is available
 cuda_avail = torch.cuda.is_available()
 
-model = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
+# Check which model to use based on config
+if config_json["model"] == "vgg19":
+    model = vgg19(number_of_actions = config_json['number_of_actions'],
+                  len_of_previous_state_vector = config_json['polygon_state_length'], pretrained=False)
+elif config_json["model"] == "gregnet":
+    model = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
 
 if cuda_avail:
     model.cuda()

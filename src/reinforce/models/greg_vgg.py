@@ -38,9 +38,10 @@ class Greg_VGG(nn.Module):
 
     def forward(self, x, previous_state):
         x = self.features(x)
-        x = x.view(x.size(0), -1)
+        #x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), 512 * 7 * 7)
+        print(x.shape)
         x = self.classifier(cat((x, previous_state.view(1, 8)), 1))
-        x = self.classifier(x)
         return x
 
     def _initialize_weights(self):
