@@ -18,6 +18,6 @@
     "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/",
     "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json",
     "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/reinforcement_learning/",
-    "model_name" : "rein_no_dropL1Loss()_0.17221"
+    "model_name" : "rein_no_dropL1Loss()_vgg_1.70526"
   }
 }

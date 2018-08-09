@@ -7,6 +7,7 @@
 from ObjectSegWithRL.src.reinforce.greg_cnn import GregNet
 from ObjectSegWithRL.src.resize_functions import convert_to_three_channel
 from ObjectSegWithRL.src.helper_functions import get_initial_state, apply_action_index_to_state
+from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19, vgg19_bn
 import skimage.io as io
 import numpy as np
 import torch
@@ -23,7 +24,12 @@ def reinforce_poly_test(image_id, config_file_path):
     temp_image = convert_to_three_channel(io.imread(config_json['file_paths']['image_dir'] + image_id + '.jpg'))
 
     # Instantiate the model instance
-    model_instance = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
+    # Decide which model to use based on config
+    if config_json["model"] == "vgg19":
+        model_instance = vgg19(number_of_actions=config_json['number_of_actions'],
+                      len_of_previous_state_vector=config_json['polygon_state_length'], pretrained=False)
+    elif config_json["model"] == "gregnet":
+        model_instance = GregNet(config_json['number_of_actions'], config_json['polygon_state_length'])
 
     # Set the mode to evaluate, so dropout is turned off
     #model_instance.eval()
