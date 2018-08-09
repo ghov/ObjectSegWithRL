@@ -5,9 +5,9 @@
 import skimage.io as io
 from skimage.transform import resize
 import json
-import numpy as np
-import torch
-
+from ObjectSegWithRL.src.utils.helper_functions import get_height_width
+from ObjectSegWithRL.src.utils.coco_helper_functions import get_coco_instance
+from ObjectSegWithRL.src.utils.visualization_helper import show_predicted_segmentation_polygon
 
 # def import_resize_functions_jup():
 #     import sys
@@ -98,47 +98,6 @@ def resize_img_and_poly(image_file_path, new_shape, polygon):
     return new_img, resize_polygon(polygon, new_shape, (height_old, width_old))
     #return new_img, new_poly
 
-
-def get_set_from_json(input_json):
-    return_set = set()
-    for key in input_json:
-        for val in input_json[key]:
-            return_set.add(val)
-
-    return return_set
-
-# Since our model expects images with three channels, we need to resize greyscale images to have three channels
-def convert_to_three_channel(image_as_numpy):
-    # Check if it is greyscale
-    if len(image_as_numpy.shape) == 2:
-        # If there are only two dimensions, then it only has height and width
-        height, width = image_as_numpy.shape
-
-        # Resize the image to have three channels
-        temp_img = np.resize(image_as_numpy, (height, width, 3))
-
-        # Return the  new resized image
-        return temp_img
-    else:
-        # If the image already had three channels, then just return it.
-        return image_as_numpy
-
-def get_key_with_most_vals(in_dict):
-    maxcount = max(len(v) for v in in_dict.values())
-    return [k for k, v in in_dict.items() if len(v) == maxcount]
-
-# If we only have one segmentation id, then we need to make a list and add it to the list.
-# All of the ids must be integer. not string
-# seg_id is either a list or a single variable
-def check_annotation_id(seg_id):
-    if(type(seg_id) is list):
-        return list
-    else:
-        if(type(seg_id) is str):
-            return [int(seg_id)]
-        else:
-            return seg_id
-
 # Given a polygon, we are going to return a new polygon that has the number_of_vertices vertices.
 # Need to account for the new length being multiple times the current length.
 # In this case, will need to make a new vertex between at least 1 newly created vertex.
@@ -163,23 +122,6 @@ def add_vertex(vertex1, vertex2):
     y3 = (y1 + y2)/2
 
     return (x3, y3)
-
-# Crop the image based on given bounding box and also adjust the dimensions of the polygon
-def crop_and_adjust_poly(image_file_path, bbox, polygon):
-
-    read_img = io.imread(image_file_path)
-
-def get_height_width(sci_img):
-    img_shape = sci_img.shape
-    height, width = None, None
-    if(len(img_shape) == 3):
-        height, width, _ = img_shape
-    elif(len(img_shape) == 2):
-        height, width = img_shape
-    else:
-        print("error occurred with getting image shape")
-
-    return height, width
 
 
 # This is something we need to do after cropping an image. Simple subtract the vector from the left edge of the bounding
@@ -208,6 +150,7 @@ def adjust_poly_out_of_bounds(polygon, xmax, ymax):
 
         if(polygon[i+1] > ymax):
             polygon[i+1] = ymax
+
 # 0 is the smallest x.
 # 1 is the smallest y.
 # 2 is the width of the image

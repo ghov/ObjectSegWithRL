@@ -2,6 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import skimage.io as io
 import torch
+from ObjectSegWithRL.src.utils.helper_functions import convert_to_three_channel
 
 # Provide a segmentation id, a image directory and a polygon json file.
 # The function will load the image, polygon and display the polygon over the image.
@@ -72,3 +73,24 @@ def show_predicted_segmentation_polygon(image_id, image_directory_path, model_st
     show_image_with_mask(coco_instance, temp_image, temp_list)
 
     #return prediction
+
+# function to take an image, produce a predicted polygon with a given model and display the segmentation on that image.
+#  Need to convert image to tensor and convert output to a list, convert to proper format for coco, then display.
+def show_reinforce_predicted_segmentation_polygon(image_id, image_directory_path, model_state_path, model_instance,
+                                                  config_file_path, coco_instance):
+    final_polygon = reinforce_poly_test(image_id, config_file_path)[0]
+
+    temp_list = list()
+    temp_list.append({'segmentation': [final_polygon]})
+
+    print(final_polygon)
+
+    # Load the image
+    # Form the full image path
+    image_path = image_directory_path + str(image_id) + '.jpg'
+
+    # Read the image as a numpy array
+    # Check if the image has three channels. If not, resize it for three channels.
+    temp_image = convert_to_three_channel(io.imread(image_path))
+
+    show_image_with_mask(coco_instance, temp_image, temp_list)

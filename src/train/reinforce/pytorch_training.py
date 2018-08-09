@@ -3,9 +3,9 @@ import json
 import numpy as np
 import torch
 import torch.nn as nn
-from ObjectSegWithRL.src.helper_functions import get_initial_state, get_np_reward_vector_from_polygon, \
+from ObjectSegWithRL.src.utils.reinforce_helper import get_initial_state, get_np_reward_vector_from_polygon, \
     apply_action_index_to_state
-from ObjectSegWithRL.src.reinforce.models.greg_vgg import vgg19
+from ObjectSegWithRL.src.models.reinforce.greg_vgg import vgg19
 from torch.optim import Adam
 from torch.utils.data import DataLoader
 from torchvision import transforms
