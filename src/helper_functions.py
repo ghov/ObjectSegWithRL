@@ -236,9 +236,8 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     # Get the index of the polygons that have negative values
     negative_set = set()
     for index, poly in enumerate(new_polygons):
-        for val in poly:
-            if(val < 0):
-                negative_set.add(index)
+        if(poly == polygon):
+            negative_set.add(index)
 
     # Convert the new_polygons to RLE format.
     rle_polygons = convert_polygon_to_compressed_RLE(coco_instance, new_polygons, height, width, multiple=True)
@@ -250,8 +249,8 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     reward_list = get_reward_list_from_iou_list(100, original_iou, iou_list)
 
     # Adjust for the negative_indexes
-    #for val in negative_set:
-    #    reward_list[val] = -100
+    for val in negative_set:
+        reward_list[val] = -10
 
     # Adjust for the step cost if needed
     if(step_cost != None):
@@ -268,7 +267,8 @@ def main():
     ground_truth = [224,105.453,183.979,83.428,176.144, 49.163,136.382,0.193,80.942,0.193,26.063,61.402,5.902, 96.891,
                     0.302,111.581,27.177,191.138,47.339,224,64.144,198.491,72.54,121.368,73.661,104.244,155.422,116.483,
                     215.9,115.257]
-    a = [15, 60, 94, 0, 209, 69, 15, 199]
+    a = [0, 0, 224, 0, 224, 224, 0, 224]
+    #a = [15, 60, 94, 0, 209, 69, 15, 199]
     b = get_changed_polygons_from_polygon(a, 5, 224, 224)
     print(np.asarray(b))
     coco = get_coco_instance()

@@ -2,10 +2,10 @@ import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 import torch
 
-class VGG(nn.Module):
+class Greg_VGG(nn.Module):
 
-    def __init__(self, features, num_classes=1000, init_weights=True):
-        super(VGG, self).__init__()
+    def __init__(self, features, number_of_actions, len_of_previous_state_vector, init_weights=True):
+        super(Greg_VGG, self).__init__()
         self.features = features
         self.classifier = nn.Sequential(
             nn.Linear(512 * 7 * 7, 4096),
@@ -14,7 +14,7 @@ class VGG(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(True),
             nn.Dropout(),
-            nn.Linear(4096, num_classes),
+            nn.Linear(4096, number_of_actions),
         )
         if init_weights:
             self._initialize_weights()
@@ -83,7 +83,7 @@ def vgg19_bn(pretrained=False, **kwargs):
     """
     if pretrained:
         kwargs['init_weights'] = False
-    model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
+    model = Greg_VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg19_bn']))
     return model
@@ -96,7 +96,7 @@ def vgg19(pretrained=False, **kwargs):
     """
     if pretrained:
         kwargs['init_weights'] = False
-    model = VGG(make_layers(cfg['E']), **kwargs)
+    model = Greg_VGG(make_layers(cfg['E']), **kwargs)
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['vgg19']))
     return model
