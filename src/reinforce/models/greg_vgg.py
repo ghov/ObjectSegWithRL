@@ -9,13 +9,29 @@ class Greg_VGG(nn.Module):
         super(Greg_VGG, self).__init__()
         self.features = features
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 4096),
+            nn.Linear((512 * 7 * 7) + len_of_previous_state_vector, 4096),
             nn.ReLU(True),
             nn.Dropout(),
             nn.Linear(4096, 4096),
-            nn.ReLU(True),
+            nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(4096, number_of_actions),
+            nn.Linear(4096, 2048),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(2048, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 512),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(512, 256),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(256, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(128, number_of_actions),
+            #nn.ReLU(inplace=True),
         )
         if init_weights:
             self._initialize_weights()
