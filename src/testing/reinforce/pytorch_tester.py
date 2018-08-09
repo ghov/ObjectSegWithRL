@@ -93,7 +93,7 @@ def reinforce_poly_test(image_id, config_file_path):
 def main():
 
     # The file path for the configuration file
-    config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/reinforce/config.json"
+    config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/config/config.json"
 
     # Set the image id. Probably should be a parameter for the function
     image_id = '3337'

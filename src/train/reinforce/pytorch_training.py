@@ -15,7 +15,7 @@ from ObjectSegWithRL.src.pytorch_custom_dataset.pytorch_dataset import GregDatas
 from ObjectSegWithRL.src.utils.resize_functions import get_coco_instance
 
 # The file path for the configuration file
-config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/reinforce/config.json"
+config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/config/config.json"
 
 # Read the config file
 with open(config_file_path, 'r') as read_file:
