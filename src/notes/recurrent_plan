@@ -61,6 +61,7 @@ should be easier for the model to learn appropriate weights to get the correct r
     the predicted reward vector. The image features can be done by getting the imagenet trained version of the models
     that I am using.
     b. Since this system requires two models, it is no longer an end to end fully trained system.
+    c. We will also only need to run the image feature cnn portion only once for each image.
 
 2. Since this system trains one action at a time, it might be more appropriate to use a recurrent model, such as an
 lstm. However, since our model is not fully differentiable, this might be difficult.
@@ -73,6 +74,7 @@ make all the training parameters the same, except for the model.Though, in the s
 
 4. It is time to get organized again. There are function in the resize_functions.py function that have nothing to do
 with resizing. They should be moved somewhere else, maybe into helper_functions.py.
+    a. This is done
 
 
 

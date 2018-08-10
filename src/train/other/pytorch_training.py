@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 # from ObjectSegWithRL.src.greg_cnn import GregNet
-from ObjectSegWithRL.src.models.greg_cnn_cSigmoid import GregNet
+from ObjectSegWithRL.src.models.other.greg_cnn_cSigmoid import GregNet
 
 cuda_avail = torch.cuda.is_available()
 
