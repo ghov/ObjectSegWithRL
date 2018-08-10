@@ -80,7 +80,7 @@ def train(num_epochs):
                 images = torch.Tensor.cuda((images.cuda())).view(1, 3, 224, 224).float()
 
             # Get the image features from the cnn
-            image_features = cnn_model.features(images)
+            image_features = cnn_model.forward(images)
             image_features.detach_()
 
             # Need to continue training on one image until either a stop action is chosen or we have exceeded the

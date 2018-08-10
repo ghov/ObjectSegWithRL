@@ -50,13 +50,13 @@ def reinforce_poly_test(image_id, config_file_path):
     # Load the reward_estimator model state
     reward_estimator_model.load_state_dict(torch.load('/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/'
                                                       'ObjectSegWithRL/data/models/reinforcement_learning/'
-                                                      'two_model_rein_vgg19_bn_L1Loss()_0.87385'))
+                                                      'two_model_rein_vgg19_bn_L1Loss()_0.40175'))
 
     # convert the image to a cuda float tensor
     image_cuda = torch.Tensor.cuda(torch.from_numpy(temp_image)).float()
 
     # Get the image features from the cnn
-    image_features = cnn_model.features(image_cuda.view(1,3,224,224))
+    image_features = cnn_model.forward(image_cuda.view(1, 3, 224, 224))
     image_features.detach_()
 
     # Get the initial state of the polygon

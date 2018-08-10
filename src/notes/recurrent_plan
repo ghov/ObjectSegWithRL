@@ -77,6 +77,16 @@ make all the training parameters the same, except for the model.Though, in the s
 with resizing. They should be moved somewhere else, maybe into helper_functions.py.
     a. This is done
 
+5. It seems that there exists an important relationship between epochs and steps. The epochs should always be
+significantly larger than the number of steps. In fact, I have found that for each step, I need about 50+ steps. This
+was tested on the two model system. This works with a small number of steps, such as 10. However, with more steps it
+seems that the learning fails anyway. Not sure what is going on here.
+
+6. I suspect that there exists an important relationship between the size of the image features vector and the state
+vector. The change between each step is very small, as only one scalar in the entire combined vector changes. The image
+feature vectors are significantly larger than the polygon state vector. It may be useful to have a smaller
+representation of the image features.
+
 
 
 
