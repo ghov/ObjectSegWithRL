@@ -62,6 +62,7 @@ should be easier for the model to learn appropriate weights to get the correct r
     that I am using.
     b. Since this system requires two models, it is no longer an end to end fully trained system.
     c. We will also only need to run the image feature cnn portion only once for each image.
+    d. One way is to just call the model.features() function, then .view(1, other dim).
 
 2. Since this system trains one action at a time, it might be more appropriate to use a recurrent model, such as an
 lstm. However, since our model is not fully differentiable, this might be difficult.

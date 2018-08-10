@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 from torch import save
 from ObjectSegWithRL.src.models.cnn.vgg import VGG
+import torch
 
 __all__ = [
     'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn',
@@ -149,8 +150,18 @@ def vgg19_bn(pretrained=False, **kwargs):
 def main():
     model = vgg19_bn(pretrained=True)
 
-    save(model.state_dict(),
-               '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/cnn/vgg19_bn_pre')
+    input = torch.randn(1,3,224,224)
+
+    output = model.features(input)
+
+    print(output.view(1,512*7*7).shape)
+
+    #print(model)
+
+    #print(nn.Sequential(*list(model.features.children())[:-1]))
+
+    #save(model.state_dict(),
+    #           '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/cnn/vgg19_bn_pre')
 
 if __name__ == "__main__":
     main()

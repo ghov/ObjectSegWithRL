@@ -104,7 +104,6 @@ def train(num_epochs):
                 # convert the previous state to a tensor
                 #print(previous_state)
                 previous_state_tensor = torch.Tensor.cuda(torch.from_numpy(np.asarray(previous_state))).float()
-
                 outputs = model.forward(images, previous_state_tensor)
 
                 # Get the predicted action

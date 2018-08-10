@@ -8,7 +8,7 @@
   "width_initial" : 224,
   "max_steps" : 150,
   "epochs" : 50,
-  "model" : "vggnet",
+  "model" : "vgg19_bn",
   "stop_action_reward" : 0,
   "learning_rate" : 0.001,
   "weight_decay" : 0.0001,
@@ -17,7 +17,7 @@
   "file_paths" : {
     "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/",
     "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json",
-    "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/reinforcement_learning/",
-    "model_name" : "rein_vgg19_L1Loss()_98401032.0"
+    "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/cnn/",
+    "model_name" : "vgg19_bn_pre"
   }
 }
