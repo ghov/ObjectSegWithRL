@@ -86,6 +86,42 @@ seems that the learning fails anyway. Not sure what is going on here.
 vector. The change between each step is very small, as only one scalar in the entire combined vector changes. The image
 feature vectors are significantly larger than the polygon state vector. It may be useful to have a smaller
 representation of the image features.
+    a. Furthermore, it looks like the model tends to average the reward vector across similar inputs. And since the
+    inputs have a very small difference at each step, then the model doesn't form distinct weights per state.
+
+10. Currently, there is only memory of the current state. It might be useful to remember more states. Hence,
+
+7. Just did a train with these configurations:   "reward_multiplier" : 100,
+  "step_cost" : -0.0005,
+  "coordinate_action_change_amount" : 10,
+  "number_of_actions" : 17,
+  "polygon_state_length" : 8,
+  "height_initial" : 224,
+  "width_initial" : 224,
+  "max_steps" : 30,
+  "epochs" : 3000,
+  "model" : "vgg19_bn",
+  "stop_action_reward" : 0,
+  "learning_rate" : 0.001,
+  "weight_decay" : 0.0001,
+  "batch_size" : 1,
+  "num_workers" : 4,
+  "file_paths" : {
+    "image_dir" : "/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/",
+    "polygon_path" : "/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json",
+    "model_dir" : "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/cnn/",
+    "model_name" : "vgg19_bn_pre"
+
+  a. The results were actually quite good. It modified multiple scalars throughout the steps, not just focusing on one
+  value. Also, it did not keep making illegal moves. Might be because there are 100 epochs for each step. Or perhaps
+  at 30 steps, it is still able to learn well.
+
+8. Increasing the step cost gives the same result, where we the model keeps choosing a single point to change.
+
+9. The biggest issue is that the system learns to average things. Hence the weights just try to average, not make
+decision based on each state.
+
+
 
 
 
