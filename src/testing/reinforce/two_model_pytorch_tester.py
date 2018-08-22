@@ -8,12 +8,14 @@ import json
 import numpy as np
 import skimage.io as io
 import torch
-from ObjectSegWithRL.src.utils.reinforce_helper import get_initial_state, apply_action_index_to_state
+from ObjectSegWithRL.src.utils.reinforce_helper import get_initial_state, apply_action_index_to_state,\
+    get_initial_state_with_history
 from ObjectSegWithRL.src.models.cnn.vgg_utils import vgg19_bn
 
 from ObjectSegWithRL.src.models.reinforce.greg_cnn import GregNet
 from ObjectSegWithRL.src.utils.helper_functions import convert_to_three_channel
-from ObjectSegWithRL.src.models.reinforce.reward_estimator import RewardEstimator
+#from ObjectSegWithRL.src.models.reinforce.reward_estimator import RewardEstimator
+from ObjectSegWithRL.src.models.reinforce.reward_estimator_history import RewardEstimator
 
 
 def reinforce_poly_test(image_id, config_file_path):
@@ -50,7 +52,7 @@ def reinforce_poly_test(image_id, config_file_path):
     # Load the reward_estimator model state
     reward_estimator_model.load_state_dict(torch.load('/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/'
                                                       'ObjectSegWithRL/data/models/reinforcement_learning/'
-                                                      'two_model_rein_vgg19_bn_L1Loss()_0.21679'))
+                                                      'two_model_rein_1hist_vgg19_bn_L1Loss()_0.71001'))
 
     # convert the image to a cuda float tensor
     image_cuda = torch.Tensor.cuda(torch.from_numpy(temp_image)).float()
@@ -61,7 +63,7 @@ def reinforce_poly_test(image_id, config_file_path):
 
     # Get the initial state of the polygon
     #initial_state = get_initial_state(config_json['height_initial'], config_json['width_initial'])
-    initial_state = get_initial_state(config_json['height_initial'], config_json['width_initial'])
+    initial_state = get_initial_state_with_history(config_json['height_initial'], config_json['width_initial'])
 
     # Go through the reinforcement loop and save each new polygon
     stop_action = False
@@ -97,7 +99,8 @@ def reinforce_poly_test(image_id, config_file_path):
         step_counter += 1
 
         # Make the new state the previous state
-        previous_state = apply_action_index_to_state(previous_state, config_json['coordinate_action_change_amount'],
+        previous_state[8:] = previous_state[0:8]
+        previous_state[0:8] = apply_action_index_to_state(previous_state[0:8], config_json['coordinate_action_change_amount'],
                                                      prediction, config_json['height_initial'], config_json['width_initial'])
 
         step_polygon_list.append(previous_state)
@@ -117,7 +120,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
