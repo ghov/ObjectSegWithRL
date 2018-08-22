@@ -122,20 +122,6 @@ def apply_action_index_to_state(state_polygon, change_amount, action_index, heig
 
     return new_state_poly
 
-# When we have a state that remembers the previous state,then this function should be used.
-# Returns a list of 8, plus 8 * number_of_past_polygons.
-# So if number_of_past_polygons = 1, then returns a list of length 16
-def get_initial_set_with_history(height, width, number_of_past_polygons = 1):
-
-    # Instantiate and populate the list
-    temp = list([0, 0, width, 0, width, height, 0, height])
-
-    # Add a zero for in each position of the history states, since there is no history in the beginning.
-    for i in range(0, number_of_past_polygons*8):
-        temp.append(0)
-
-    return temp
-
 # Set the initial state to be the entire image, with the left corner being (x=0, y=0). The format is (x,y)
 # This really depends on the size that we need, so it should be more flexible
 def get_initial_state(height, width):
