@@ -107,6 +107,7 @@ the model would not be simply seeing the same results over and over again.
 
 13. Should consider branching in git. Need to explore multiple possible ways of improving the model, which will
 require significant modification of the existing code. Otherwise could make new file and store the new code there.
+    a. This is done.
 
 7. Just did a train with these configurations:   "reward_multiplier" : 100,
   "step_cost" : -0.0005,
@@ -138,6 +139,11 @@ require significant modification of the existing code. Otherwise could make new 
 9. The biggest issue is that the system learns to average things. Hence the weights just try to average, not make
 decision based on each state.
 
+14. Figured out how to use opencv2 to create an image where everything is black, except the area that the mask covers.
+Can use this in the model, since this avoids having to attach a polygon vector to the image features vector. This should
+ help with the problem of the states being too similar, hence possibly causing averaging of the output. However, it may
+ be a bad idea to black out everything that isn't in the mask. Might consider putting a highlight around the mask,
+ instead of blacking things out.
 
 
 
