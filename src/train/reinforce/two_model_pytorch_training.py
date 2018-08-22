@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from ObjectSegWithRL.src.utils.reinforce_helper import get_initial_state, get_np_reward_vector_from_polygon, \
-    apply_action_index_to_state
+    apply_action_index_to_state, get_initial_set_with_history
 from torch.optim import Adam
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -14,7 +14,8 @@ from ObjectSegWithRL.src.utils.resize_functions import get_coco_instance
 from ObjectSegWithRL.src.models.reinforce.greg_cnn import GregNet
 
 from ObjectSegWithRL.src.models.cnn.vgg_utils import vgg19_bn
-from ObjectSegWithRL.src.models.reinforce.reward_estimator import RewardEstimator
+#from ObjectSegWithRL.src.models.reinforce.reward_estimator import RewardEstimator
+from ObjectSegWithRL.src.models.reinforce.reward_estimator_history import RewardEstimator
 
 # The file path for the configuration file
 config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/config/config.json"
@@ -69,7 +70,9 @@ def train(num_epochs):
     cnn_model.eval()
 
     # Get the initial state of the polygon
-    initial_state = get_initial_state(config_json['height_initial'], config_json['width_initial'])
+    initial_state = get_initial_set_with_history(config_json['height_initial'], config_json['width_initial'])
+    #print(len(initial_state))
+    #initial_state = get_initial_state(config_json['height_initial'], config_json['width_initial'])
 
     for epoch in range(num_epochs):
         reward_estimator_model.train()
@@ -100,7 +103,7 @@ def train(num_epochs):
                 # print(images.shape)
 
                 # convert the previous state to a tensor
-                #print(previous_state)
+                #print(len(previous_state))
                 previous_state_tensor = torch.Tensor.cuda(torch.from_numpy(np.asarray(previous_state))).float()
                 outputs = reward_estimator_model.forward(image_features, previous_state_tensor)
 
@@ -110,7 +113,7 @@ def train(num_epochs):
                 #print(str(labels.numpy().tolist()[0]))
 
                 # Get the label, by taking all actions on previous state
-                reward_np = get_np_reward_vector_from_polygon(previous_state,
+                reward_np = get_np_reward_vector_from_polygon(previous_state[0:8],
                                                               config_json['coordinate_action_change_amount'],
                 labels.numpy().tolist()[0], config_json['height_initial'], config_json['width_initial'], coco,
                                                               config_json['step_cost'],
@@ -140,13 +143,14 @@ def train(num_epochs):
 
                 #print("The prediction is: " + str(prediction))
 
-                train_acc += torch.sum(outputs.data == reward_tensor.view(1,17).data)
+                train_acc += torch.sum(outputs.data == reward_tensor.view(1, 17).data)
 
                 # Append the reinforcement step counter
                 step_counter += 1
 
                 # Make the new state the previous state
-                previous_state = apply_action_index_to_state(previous_state,
+                previous_state[8:] = previous_state[0:8]
+                previous_state[0:8] = apply_action_index_to_state(previous_state[0:8],
                                                              config_json['coordinate_action_change_amount'],
                                                              prediction, config_json['height_initial'],
                                                              config_json['width_initial'])
@@ -165,7 +169,7 @@ def train(num_epochs):
 
     torch.save(reward_estimator_model.state_dict(),
                '/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/data/models/'
-               'reinforcement_learning/two_model_rein_' + config_json["model"] + '_' + loss_fn.__str__() + "_" +
+               'reinforcement_learning/two_model_rein_1hist_' + config_json["model"] + '_' + loss_fn.__str__() + "_" +
                str(round(train_loss.data.numpy().item(), 5)))
 
 def main():
