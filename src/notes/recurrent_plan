@@ -89,7 +89,20 @@ representation of the image features.
     a. Furthermore, it looks like the model tends to average the reward vector across similar inputs. And since the
     inputs have a very small difference at each step, then the model doesn't form distinct weights per state.
 
-10. Currently, there is only memory of the current state. It might be useful to remember more states. Hence,
+10. Currently, there is only memory of the current state. It might be useful to remember more states.
+    a. Update, this does not seem to make a positive difference. It might be making a negative difference, in fact.
+
+11. Read that in Deep Q Network, they used experience replay to greatly increase the results. Also used a second fixed
+Q network to further increase results. Could implement experience replay and see if that fixes the problem. This
+involves saving the (state, action, reward, new state) in a big table. Later on, instead of taking a normal step, we
+sample from this big table and learn from that.
+
+12. Should consider adding random choices to the model. Instead of choosing the largest return prediction during
+training, might be better to always take a random move or simply take a random move with alpha probability. This means
+the model would not be simply seeing the same results over and over again.
+
+13. Should consider branching in git. Need to explore multiple possible ways of improving the model, which will
+require significant modification of the existing code. Otherwise could make new file and store the new code there.
 
 7. Just did a train with these configurations:   "reward_multiplier" : 100,
   "step_cost" : -0.0005,
@@ -120,6 +133,7 @@ representation of the image features.
 
 9. The biggest issue is that the system learns to average things. Hence the weights just try to average, not make
 decision based on each state.
+
 
 
 
