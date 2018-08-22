@@ -50,7 +50,7 @@ def reinforce_poly_test(image_id, config_file_path):
     # Load the reward_estimator model state
     reward_estimator_model.load_state_dict(torch.load('/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/'
                                                       'ObjectSegWithRL/data/models/reinforcement_learning/'
-                                                      'two_model_rein_vgg19_bn_L1Loss()_0.21679'))
+                                                      'two_model_rein_vgg19_bn_L1Loss()_0.1094'))
 
     # convert the image to a cuda float tensor
     image_cuda = torch.Tensor.cuda(torch.from_numpy(temp_image)).float()

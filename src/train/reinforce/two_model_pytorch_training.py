@@ -55,6 +55,9 @@ my_dataloader = DataLoader(dataset, batch_size=1, num_workers=4)
 
 coco = get_coco_instance()
 
+# Instantiate the action for the random choice
+actions = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+
 def train(num_epochs):
     best_acc = 0.0
     cuda_avail = torch.cuda.is_available()
@@ -134,7 +137,8 @@ def train(num_epochs):
                 optimizer.step()
 
                 train_loss += loss.cpu().data[0] * images.size(0)
-                prediction = int(prediction.data.cpu().numpy()[0])
+                #prediction = int(prediction.data.cpu().numpy()[0])
+                prediction = np.random.choice(actions)
 
                 if(prediction == 16):
                     stop_action = True

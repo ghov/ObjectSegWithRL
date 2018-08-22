@@ -171,8 +171,8 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     reward_list = get_reward_list_from_iou_list(100, original_iou, iou_list)
 
     # Adjust for the negative_indexes
-    #for val in negative_set:
-    #    reward_list[val] = -.005
+    for val in negative_set:
+        reward_list[val] = -1
 
     # Adjust for the step cost if needed
     if(step_cost != None):

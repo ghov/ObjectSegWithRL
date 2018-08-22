@@ -101,6 +101,10 @@ sample from this big table and learn from that.
 training, might be better to always take a random move or simply take a random move with alpha probability. This means
 the model would not be simply seeing the same results over and over again.
 
+    a. Added training code that only makes random decisions. Interestingly, the model seems to be more consistent with
+    regards to loss. In testing, however, the model chooses one action and continuously applies that action. No other
+    action is ever chosen. Same problem as seen in the past.
+
 13. Should consider branching in git. Need to explore multiple possible ways of improving the model, which will
 require significant modification of the existing code. Otherwise could make new file and store the new code there.
 
