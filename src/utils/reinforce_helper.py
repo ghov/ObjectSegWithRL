@@ -5,7 +5,7 @@ import numpy as np
 from ObjectSegWithRL.src.utils.coco_helper_functions import get_RLE_iou, convert_polygon_to_compressed_RLE, \
     get_coco_instance
 
-from ObjectSegWithRL.src.utils.helper_functions import get_annotation_from_polygon
+from ObjectSegWithRL.src.utils.helper_functions import get_annotation_from_polygon, get_height_width
 
 ###
 # Constants
@@ -23,8 +23,10 @@ def apply_polygon_to_image(img_np_arr, polygon_list, operation, coco_instance):
     # Get the polygon list as a dictionary in 'segmentation keyword'
     polygon = get_annotation_from_polygon(polygon_list)
 
+    height, width = get_height_width(img_np_arr)
+
     # Get the mask image from the list
-    mask = coco_instance.annToMask(polygon)
+    mask = coco_instance.annToMask_hw(polygon, height, width)
 
     # Get the correct operation based on input
     if(operation == 'or'):
@@ -238,6 +240,14 @@ def main():
     print(get_np_reward_vector_from_polygon(a, 1, ground_truth, 224, 224, coco, step_cost, 0.001))
 
     print(apply_action_index_to_state(a, 5, 7, 224, 224))
+
+    img_path = '/media/greghovhannisyan/BackupData1/mscoco/images/train2017/000000172310.jpg'
+    img = cv2.imread(img_path)
+    res = apply_polygon_to_image(img, a, 'and', coco)
+
+    cv2.imshow('img', res)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()

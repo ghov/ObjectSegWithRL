@@ -51,7 +51,7 @@ def get_annotation_from_polygon(polygon_list):
 
     polygon = check_segmentation_polygon(polygon_list)
 
-    return {'segmentation': check_segmentation_polygon(polygon)}
+    return {'segmentation': check_segmentation_polygon(polygon), 'image_id' : 000}
 
 # The annotations in mscoco are stored as a dictionary, under the key 'segmentation'. The value is a [[]].
 # So we need to make sure that polygon used with 'segmentation' is in this format
