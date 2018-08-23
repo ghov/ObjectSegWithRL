@@ -45,6 +45,14 @@ def get_height_width(sci_img):
 
     return height, width
 
+# The annotations in coco are dictionaries with one of the keys being 'segmentation'.
+# So, this function places the given list into a dictionary under the 'segmentation' key.
+def get_annotation_from_polygon(polygon_list):
+
+    polygon = check_segmentation_polygon(polygon_list)
+
+    return {'segmentation': check_segmentation_polygon(polygon)}
+
 # The annotations in mscoco are stored as a dictionary, under the key 'segmentation'. The value is a [[]].
 # So we need to make sure that polygon used with 'segmentation' is in this format
 def check_segmentation_polygon(polygon):
