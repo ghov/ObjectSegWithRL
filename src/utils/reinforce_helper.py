@@ -1,8 +1,11 @@
 # Functions to help with the rnn/reinforcement learning
 
+import cv2
 import numpy as np
-from ObjectSegWithRL.src.utils.coco_helper_functions import get_RLE_iou, convert_polygon_to_compressed_RLE
-from ObjectSegWithRL.src.utils.coco_helper_functions import get_coco_instance
+from ObjectSegWithRL.src.utils.coco_helper_functions import get_RLE_iou, convert_polygon_to_compressed_RLE, \
+    get_coco_instance
+
+from ObjectSegWithRL.src.utils.helper_functions import get_annotation_from_polygon
 
 ###
 # Constants
@@ -10,6 +13,31 @@ reward_multiplier = 100
 step_cost = -0.005
 coordinate_action_change_amount = 10
 ###
+
+# Takes an image, a polygon as a list.
+# Turns the polygon into a segmentation image.
+# Applies bitwise operation on the image and the mask with opencv2.
+# Returns the new image as an numpy array
+def apply_polygon_to_image(img_np_arr, polygon_list, operation, coco_instance):
+
+    # Get the polygon list as a dictionary in 'segmentation keyword'
+    polygon = get_annotation_from_polygon(polygon_list)
+
+    # Get the mask image from the list
+    mask = coco_instance.annToMask(polygon)
+
+    # Get the correct operation based on input
+    if(operation == 'or'):
+        bitwise = cv2.bitwise_or
+    elif(operation == 'and'):
+        bitwise = cv2.bitwise_and
+    elif(operation == 'not'):
+        bitwise = cv2.bitwise_not
+
+    # Apply mask to image
+    new_image = bitwise(img_np_arr, img_np_arr, mask=mask)
+
+    return new_image
 
 # given a polygon vector, index, and amount.
 # change the value of the x, y scalars at that index by the amount.
