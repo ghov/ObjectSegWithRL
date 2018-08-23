@@ -444,6 +444,15 @@ class COCO:
             rle = ann['segmentation']
         return rle
 
+    def annToMask_hw(self, ann, height, width):
+        """
+        Convert annotation which can be polygons, uncompressed RLE, or RLE to binary mask.
+        :return: binary mask (numpy 2D array)
+        """
+        rle = self.annToRLE_hw(ann, height, width)
+        m = maskUtils.decode(rle)
+        return m
+
     def annToMask(self, ann):
         """
         Convert annotation which can be polygons, uncompressed RLE, or RLE to binary mask.
