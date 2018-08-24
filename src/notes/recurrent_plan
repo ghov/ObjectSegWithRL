@@ -143,7 +143,8 @@ decision based on each state.
 Can use this in the model, since this avoids having to attach a polygon vector to the image features vector. This should
  help with the problem of the states being too similar, hence possibly causing averaging of the output. However, it may
  be a bad idea to black out everything that isn't in the mask. Might consider putting a highlight around the mask,
- instead of blacking things out.
+ instead of blacking things out. Need a modified version of a cnn, with a smaller output size. Also need to modify the
+ training and testing to cope with this.
 
 
 

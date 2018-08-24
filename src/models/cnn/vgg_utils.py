@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
-from torch import save
 from ObjectSegWithRL.src.models.cnn.vgg import VGG
 import torch
 
@@ -150,11 +149,11 @@ def vgg19_bn(pretrained=False, **kwargs):
 def main():
     model = vgg19_bn(pretrained=True)
 
-    input = torch.randn(1,3,224,224)
+    input = torch.randn(1, 3, 224, 224)
 
     output = model.features(input)
 
-    print(output.view(1,512*7*7).shape)
+    print(output.view(1, 512*7*7).shape)
 
     #print(model)
 

@@ -202,7 +202,7 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
 
     # Adjust for the negative_indexes
     for val in negative_set:
-        reward_list[val] = -1
+        reward_list[val] = -100
 
     # Adjust for the step cost if needed
     if(step_cost != None):
@@ -243,7 +243,7 @@ def main():
 
     img_path = '/media/greghovhannisyan/BackupData1/mscoco/images/train2017/000000172310.jpg'
     img = cv2.imread(img_path)
-    res = apply_polygon_to_image(img, a, 'and', coco)
+    res = apply_polygon_to_image(img, [0, 0, 640, 0, 640, 480, 0, 480], 'and', coco)
 
     cv2.imshow('img', res)
     cv2.waitKey(0)
