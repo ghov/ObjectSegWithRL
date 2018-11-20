@@ -1,10 +1,10 @@
 import json
 import cv2
 import numpy as np
-from ObjectSegWithRL.src.utils.reinforce_helper import get_initial_state, get_np_reward_vector_from_polygon, \
+from poly_seg_utils.reinforce_helper import get_initial_state, get_np_reward_vector_from_polygon, \
     apply_action_index_to_state, apply_polygon_to_image
 
-from ObjectSegWithRL.src.utils.resize_functions import get_coco_instance
+from poly_seg_utils.resize_functions import get_coco_instance
 
 # The file path for the configuration file
 config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/config/config.json"
@@ -13,8 +13,9 @@ config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/Obje
 with open(config_file_path, 'r') as read_file:
     config_json = json.load(read_file)
 
-annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1.json'
-image_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_1/3337.jpg'
+annotation_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp2.json'
+image_path = '/media/greghovhannisyan/BackupData1/mscoco/images/by_vertex/temp_2/8786.jpg'
+image_id = '3337'
 
 # Get the coco instance
 coco = get_coco_instance()
@@ -26,7 +27,9 @@ image = cv2.imread(image_path)
 with open(annotation_file_path, 'r') as ann:
     label = json.load(ann)
 
-label_np = np.asarray(label["3337"]).astype('float')
+label_np = np.asarray(label[image_id]).astype('float')
+
+reward_list = list()
 
 def get_optimal_path(num_epochs):
 
@@ -63,9 +66,12 @@ def get_optimal_path(num_epochs):
                                                       config_json['step_cost'],
                                                       config_json['stop_action_reward'])
 
+        reward_list.append(reward_np)
+
         prediction = np.argmax(reward_np)
 
         #print(str(prediction))
+        print(str(reward_np.argsort()[-5:][::-1]))
 
         if(prediction == 16):
             stop_action = True
@@ -81,12 +87,24 @@ def get_optimal_path(num_epochs):
 
         step_polygon_list.append(previous_state)
 
-    return step_polygon_list
+    return step_polygon_list, reward_list, step_counter
 
 def main():
-    result = get_optimal_path(config_json['epochs'])
-    print(result)
-    print(len(result))
+    polygons, rewards, count = get_optimal_path(config_json['epochs'])
+    print(polygons[1:])
+    print(len(polygons[1:]))
+    print(rewards)
+    print(len(rewards))
+    print(count)
+
+    write_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1(copy).json'
+    with open(write_file_path, 'w') as write_file:
+        json.dump({image_id: polygons[-1]}, write_file)
+
+    avg_rewards = rewards[0]
+    for val in rewards:
+        avg_rewards += val
+    print(avg_rewards/count)
 
 if __name__ == "__main__":
     main()

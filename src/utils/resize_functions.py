@@ -5,9 +5,9 @@
 import skimage.io as io
 from skimage.transform import resize
 import json
-from ObjectSegWithRL.src.utils.helper_functions import get_height_width
-from ObjectSegWithRL.src.utils.coco_helper_functions import get_coco_instance
-from ObjectSegWithRL.src.utils.visualization_helper import show_predicted_segmentation_polygon
+from poly_seg_utils.helper_functions import get_height_width
+from poly_seg_utils.coco_helper_functions import get_coco_instance
+from poly_seg_utils.visualization_helper import show_predicted_segmentation_polygon
 
 # def import_resize_functions_jup():
 #     import sys

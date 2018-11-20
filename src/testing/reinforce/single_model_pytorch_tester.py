@@ -89,6 +89,8 @@ def reinforce_poly_test(image_id, config_file_path):
         _, prediction = torch.max(output_softmax.data, 1)
         prediction = int(prediction.data.cpu().numpy()[0])
 
+        print('The prediction is: ' + str(prediction))
+
         if (prediction == 16):
             stop_action = True
 
@@ -107,11 +109,17 @@ def main():
 
     # The file path for the configuration file
     config_file_path = "/home/greghovhannisyan/PycharmProjects/towards_rlnn_cnn/ObjectSegWithRL/src/config/config.json"
+    write_file_path = '/media/greghovhannisyan/BackupData1/mscoco/annotations/by_vertex/temp1(copy).json'
 
     # Set the image id. Probably should be a parameter for the function
-    image_id = '3337'
+    image_id = '12866'
 
-    print(reinforce_poly_test(image_id, config_file_path))
+    result = reinforce_poly_test(image_id, config_file_path)
+
+    with open(write_file_path, 'w') as write_file:
+        json.dump({image_id: result[-1]}, write_file)
+
+    print(result)
 
 
 if __name__ == "__main__":

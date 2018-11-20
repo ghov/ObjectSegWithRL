@@ -2,10 +2,10 @@
 
 import cv2
 import numpy as np
-from ObjectSegWithRL.src.utils.coco_helper_functions import get_RLE_iou, convert_polygon_to_compressed_RLE, \
+from poly_seg_utils.coco_helper_functions import get_RLE_iou, convert_polygon_to_compressed_RLE, \
     get_coco_instance
 
-from ObjectSegWithRL.src.utils.helper_functions import get_annotation_from_polygon, get_height_width
+from poly_seg_utils.helper_functions import get_annotation_from_polygon, get_height_width
 
 ###
 # Constants
@@ -201,8 +201,8 @@ def get_np_reward_vector_from_polygon(polygon, change_amount, ground_truth_polyg
     reward_list = get_reward_list_from_iou_list(100, original_iou, iou_list)
 
     # Adjust for the negative_indexes
-    for val in negative_set:
-        reward_list[val] = -100
+    #for val in negative_set:
+    #    reward_list[val] = -10000
 
     # Adjust for the step cost if needed
     if(step_cost != None):

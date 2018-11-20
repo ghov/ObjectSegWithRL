@@ -146,6 +146,18 @@ Can use this in the model, since this avoids having to attach a polygon vector t
  instead of blacking things out. Need a modified version of a cnn, with a smaller output size. Also need to modify the
  training and testing to cope with this.
 
+10/25/18
+15. Thoughts about limiting the number of possible actions that an agent can take. This will not fix the problem of the
+agent taking the same path, regardless of input. The agent will still take the action that has the highest average
+return, regardless of the image state.
+
+16. Could add a condition to save the model is the learning rate is <= some_value. 0.01 might be a good example
+
+17. We know that this works sometimes, but not always. The hypothesis was that the initialization of the weights
+matters, but it might be the case that we are in fact able or unable to reach a good state. Maybe we just get stuck at
+a local minimum/maximum. Read somewhere that lack of exploration could be an issue. Maybe need to show the model
+more/all of the possible states and their rewards?
+
 
 
 

@@ -1,6 +1,6 @@
 from pycocotools.coco import COCO
-from ObjectSegWithRL.cocoapi.PythonAPI.pycocotools import mask
-from ObjectSegWithRL.src.utils.helper_functions import check_segmentation_polygon
+from pycocotools import mask
+from poly_seg_utils.helper_functions import check_segmentation_polygon
 
 # Need a coco instance for lots of stuff, including showing annotation on image.
 def get_coco_instance(annotation_file=None):

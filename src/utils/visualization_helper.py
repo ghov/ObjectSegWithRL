@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import skimage.io as io
 import torch
-from ObjectSegWithRL.src.utils.helper_functions import convert_to_three_channel
+#from ObjectSegWithRL.src.utils.helper_functions import convert_to_three_channel
 
 # Provide a segmentation id, a image directory and a polygon json file.
 # The function will load the image, polygon and display the polygon over the image.
@@ -19,10 +19,9 @@ def show_image_mask_by_id(coco_instance, segmentation_id, image_directory_path, 
         poly_json = json.load(read_file)
 
     temp_list = list()
-    temp_list.append({'segmentation' : [poly_json[str(segmentation_id)]]})
+    temp_list.append({'segmentation': [poly_json[str(segmentation_id)]]})
 
     show_image_with_mask(coco_instance, temp_image, temp_list)
-
 
 # Load the image and put the annotation on it. Then display it.
 def show_image_with_mask(coco_instance, image_np_arr, annotation):
